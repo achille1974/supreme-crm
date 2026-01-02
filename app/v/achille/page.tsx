@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -108,7 +109,7 @@ export default function AchillePage() {
           </p>
         </div>
 
-        {/* === MICRO SEPARAZIONE (UNICA AGGIUNTA) === */}
+        {/* MICRO SEPARAZIONE */}
         <div style={todayDivider}>
           <span style={todayLine} />
           <span style={todayLabel}>Oggi. Scelte concrete.</span>
@@ -178,14 +179,15 @@ export default function AchillePage() {
   );
 }
 
-/* STILI */
-const page = { background: "#FAFAF8", minHeight: "100vh" };
-const container = { maxWidth: 720, margin: "0 auto", padding: 16 };
-const photoWrap = { position: "relative", height: 220, marginBottom: 12 };
-const h1 = { fontSize: 28, fontWeight: 900 };
-const subtitle = { fontSize: 14, color: "#374151", marginBottom: 8 };
-const actions = { display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 };
-const btnPrimary = {
+/* ================= STILI ================= */
+
+const page: CSSProperties = { background: "#FAFAF8", minHeight: "100vh" };
+const container: CSSProperties = { maxWidth: 720, margin: "0 auto", padding: 16 };
+const photoWrap: CSSProperties = { position: "relative", height: 220, marginBottom: 12 };
+const h1: CSSProperties = { fontSize: 28, fontWeight: 900 };
+const subtitle: CSSProperties = { fontSize: 14, color: "#374151", marginBottom: 8 };
+const actions: CSSProperties = { display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 };
+const btnPrimary: CSSProperties = {
   padding: "12px 16px",
   background: "#111827",
   color: "#fff",
@@ -193,7 +195,7 @@ const btnPrimary = {
   textDecoration: "none",
   fontWeight: 800,
 };
-const btnGhost = {
+const btnGhost: CSSProperties = {
   padding: "12px 16px",
   border: "1px solid #D1D5DB",
   borderRadius: 14,
@@ -201,36 +203,41 @@ const btnGhost = {
   color: "#111827",
   fontWeight: 700,
 };
-const text = {
+const text: CSSProperties = {
   fontSize: 16,
   lineHeight: 1.6,
   display: "flex",
   flexDirection: "column",
   gap: 10,
 };
-const videoWrap = { marginTop: 24, aspectRatio: "16/9" };
-const h2 = { marginTop: 30, fontSize: 22, fontWeight: 900 };
-const grid = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 };
-const imgContain = { position: "relative", height: 160 };
-const imgCover = { position: "relative", height: 180 };
-const links = { marginTop: 30, display: "flex", flexDirection: "column", gap: 12 };
-const logoWrap = {
+const videoWrap: CSSProperties = { marginTop: 24, aspectRatio: "16/9" };
+const h2: CSSProperties = { marginTop: 30, fontSize: 22, fontWeight: 900 };
+const grid: CSSProperties = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 };
+const imgContain: CSSProperties = { position: "relative", height: 160 };
+const imgCover: CSSProperties = { position: "relative", height: 180 };
+const links: CSSProperties = { marginTop: 30, display: "flex", flexDirection: "column", gap: 12 };
+const logoWrap: CSSProperties = {
   marginTop: 50,
   padding: "24px 0",
   width: "100%",
   display: "flex",
   justifyContent: "center",
 };
-const footer = { marginTop: 40, textAlign: "center", fontSize: 12, color: "#6B7280" };
+const footer: CSSProperties = {
+  marginTop: 40,
+  textAlign: "center",
+  fontSize: 12,
+  color: "#6B7280",
+};
 
 /* MICRO SEPARAZIONE */
-const todayDivider = {
+const todayDivider: CSSProperties = {
   marginTop: 28,
   display: "flex",
   alignItems: "center",
   gap: 12,
 };
-const todayLine = {
+const todayLine: CSSProperties = {
   flex: 1,
   height: 1,
   background: "#E5E7EB",
