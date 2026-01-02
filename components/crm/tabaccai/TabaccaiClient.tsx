@@ -62,11 +62,15 @@ export default function TabaccaiClient({
   }, [tabaccai, filters]);
 
   /* =========================
-     COMUNI DISPONIBILI
+     COMUNI DISPONIBILI (FIX TS)
   ========================= */
   const comuni = useMemo(() => {
     return Array.from(
-      new Set(tabaccai.map((t) => t.comune).filter(Boolean))
+      new Set(
+        tabaccai
+          .map((t) => t.comune)
+          .filter((c): c is string => Boolean(c))
+      )
     );
   }, [tabaccai]);
 
