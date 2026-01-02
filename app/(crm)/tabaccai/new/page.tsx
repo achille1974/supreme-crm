@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 // COMPONENTI
@@ -18,56 +18,19 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default function TabaccaioPage() {
-  const params = useParams();
+export default function NuovoTabaccaioPage() {
   const router = useRouter();
-  const id = Number(params.id);
-
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<any>({});
+
+  const [form, setForm] = useState<any>({
+    stato_consenso: "mai_chiesto",
+    priorita: "media",
+  });
 
   /* =========================
-     LOAD (SOLO MODIFICA)
-  ========================= */
-  useEffect(() => {
-    if (!id) {
-      router.replace("/tabaccai");
-      return;
-    }
-
-    async function load() {
-      const { data, error } = await supabase
-        .from("tabaccai") // ✅ CRM OPERATIVO
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      if (error || !data) {
-        router.replace("/tabaccai");
-        return;
-      }
-
-      const canali = (data.canali_consenso || "").split(",");
-
-      setForm({
-        ...data,
-        consenso_whatsapp: canali.includes("whatsapp"),
-        consenso_email: canali.includes("email"),
-        consenso_telefono: canali.includes("telefono"),
-      });
-
-      setLoading(false);
-    }
-
-    load();
-  }, [id, router]);
-
-  /* =========================
-     SAVE (UPDATE)
+     SAVE (INSERT)
   ========================= */
   async function save() {
-    if (!id) return;
     setSaving(true);
 
     const canali: string[] = [];
@@ -76,6 +39,7 @@ export default function TabaccaioPage() {
     if (form.consenso_telefono) canali.push("telefono");
 
     const payload = {
+      /* ANAGRAFICA */
       ragione_sociale: form.ragione_sociale ?? null,
       titolare: form.titolare ?? null,
       comune: form.comune ?? null,
@@ -84,23 +48,28 @@ export default function TabaccaioPage() {
       cap: form.cap ?? null,
       numero_rivendita: form.numero_rivendita ?? null,
 
+      /* CONTATTI */
       telefono: form.telefono ?? null,
       cellulare: form.cellulare ?? null,
       email: form.email ?? null,
       pec: form.pec ?? null,
 
+      /* PRIVACY */
       stato_consenso: form.stato_consenso ?? "mai_chiesto",
       canali_consenso: canali.length ? canali.join(",") : null,
       modalita_consenso: form.consenso_nota ?? null,
 
+      /* STATO COMMERCIALE */
       stato_supreme: form.stato_supreme ?? null,
       interesse_supreme: form.interesse_supreme ?? null,
       priorita: form.priorita ?? "media",
 
+      /* AGENDA */
       prossima_azione: form.prossima_azione ?? null,
       data_prossima_azione: form.data_prossima_azione ?? null,
       nota_prossima_azione: form.nota_prossima_azione ?? null,
 
+      /* CLASSIFICAZIONE */
       tipo_attivita: form.tipo_attivita ?? null,
       dimensione_attivita: form.dimensione_attivita ?? null,
       zona_attivita: form.zona_attivita ?? null,
@@ -112,32 +81,31 @@ export default function TabaccaioPage() {
       altro_2: form.altro_2 ?? null,
       altro_3: form.altro_3 ?? null,
 
+      /* NOTE */
       note: form.note ?? null,
     };
 
-    const { error } = await supabase
-      .from("tabaccai") // ✅ UPDATE SU CRM
-      .update(payload)
-      .eq("id", id);
+    const { data, error } = await supabase
+      .from("tabaccai")
+      .insert(payload)
+      .select("id")
+      .single();
 
     setSaving(false);
 
-    if (error) {
+    if (error || !data?.id) {
       alert("Errore nel salvataggio");
       return;
     }
 
-    alert("Salvataggio riuscito");
-  }
-
-  if (loading) {
-    return <div className="p-6">Caricamento…</div>;
+    // 👉 redirect automatico alla scheda
+    router.push(`/tabaccai/${data.id}`);
   }
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-10">
       <TabaccaioHeader
-        id={form.id}
+        id={null}
         ragione_sociale={form.ragione_sociale}
         titolare={form.titolare}
         comune={form.comune}

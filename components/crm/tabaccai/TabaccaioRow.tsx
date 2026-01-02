@@ -3,8 +3,7 @@
 import Link from "next/link";
 
 type Tabaccaio = {
-  id?: number | null; // ✅ FIX
-  id_tabacchino?: number | null; // ✅ FIX
+  id?: number | null;
 
   ragione_sociale?: string | null;
   comune?: string | null;
@@ -25,7 +24,7 @@ export default function TabaccaioRow({
 }: {
   tabaccaio: Tabaccaio;
 }) {
-  const id = tabaccaio.id_tabacchino ?? tabaccaio.id;
+  const id = tabaccaio.id;
   if (!id) return null;
 
   /* =========================
@@ -114,9 +113,7 @@ export default function TabaccaioRow({
           {tabaccaio.indirizzo || "Indirizzo non disponibile"}
         </div>
 
-        {/* =========================
-            AGENDA / FOLLOW-UP
-        ========================= */}
+        {/* AGENDA / FOLLOW-UP */}
         <div className="text-sm">
           {tabaccaio.prossima_azione ? (
             <span
@@ -185,7 +182,7 @@ export default function TabaccaioRow({
           </div>
         )}
 
-        {/* SCHEDA */}
+        {/* SCHEDA CRM */}
         <Link
           href={`/tabaccai/${id}`}
           title="Apri scheda CRM"

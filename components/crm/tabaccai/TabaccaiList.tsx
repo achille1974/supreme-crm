@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import TabaccaioRow from "./TabaccaioRow";
-import NuovoTabaccaioModal from "./NuovoTabaccaioModal";
 
 export type Tabaccaio = {
   id?: number | null;
-  id_tabacchino?: number | null;
 
   ragione_sociale?: string | null;
   comune?: string | null;
@@ -35,8 +33,6 @@ type Props = {
 };
 
 export default function TabaccaiList({ tabaccai }: Props) {
-  const [open, setOpen] = useState(false);
-
   return (
     <div className="max-w-6xl mx-auto space-y-4">
       {/* HEADER LISTA */}
@@ -50,16 +46,17 @@ export default function TabaccaiList({ tabaccai }: Props) {
           </p>
         </div>
 
-        <button
-          onClick={() => setOpen(true)}
+        {/* ✅ UNICO MODO CORRETTO DI CREARE */}
+        <Link
+          href="/tabaccai/new"
           className="
             px-4 py-2 rounded-lg
-            bg-blue-600 text-white font-semibold
-            hover:bg-blue-700
+            bg-green-600 text-white font-semibold
+            hover:bg-green-700
           "
         >
           ➕ Nuovo tabaccaio
-        </button>
+        </Link>
       </div>
 
       {/* LISTA */}
@@ -70,12 +67,11 @@ export default function TabaccaiList({ tabaccai }: Props) {
       ) : (
         <div className="flex flex-col gap-3">
           {tabaccai.map((t) => {
-            const id = t.id_tabacchino ?? t.id;
-            if (!id) return null;
+            if (!t.id) return null;
 
             return (
               <div
-                key={id}
+                key={t.id}
                 className="
                   bg-white
                   rounded-xl
@@ -90,13 +86,6 @@ export default function TabaccaiList({ tabaccai }: Props) {
             );
           })}
         </div>
-      )}
-
-      {/* MODALE NUOVO TABACCAIO */}
-      {open && (
-        <NuovoTabaccaioModal
-          onClose={() => setOpen(false)}
-        />
       )}
     </div>
   );
