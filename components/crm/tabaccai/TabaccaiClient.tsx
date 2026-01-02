@@ -5,8 +5,8 @@ import TabaccaiList from "./TabaccaiList";
 import TabaccaiFilters from "./TabaccaiFilters";
 
 type Tabaccaio = {
-  id?: number;
-  id_tabacchino?: number;
+  id?: number | null; // ✅ FIX TS (accetta null dal DB)
+  id_tabacchino?: number | null;
 
   ragione_sociale?: string | null;
   comune?: string | null;
@@ -82,7 +82,7 @@ export default function TabaccaiClient({
         <p className="text-sm text-gray-500">Lista operativa</p>
       </div>
 
-      {/* FILTRI (SOLO RICERCA + COMUNE + RESET) */}
+      {/* FILTRI */}
       <TabaccaiFilters
         filters={filters}
         onChange={setFilters}
