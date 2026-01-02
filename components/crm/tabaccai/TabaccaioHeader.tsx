@@ -1,7 +1,7 @@
 "use client";
 
 type TabaccaioHeaderProps = {
-  id: number;
+  id?: number; // ✅ ORA OPZIONALE (CREAZIONE OK)
   ragione_sociale?: string | null;
   titolare?: string | null;
   comune?: string | null;
@@ -33,14 +33,17 @@ export default function TabaccaioHeader({
           <div className="text-xs uppercase tracking-wide text-slate-400">
             Scheda tabaccaio
           </div>
+
           <div className="text-2xl font-extrabold text-slate-900 leading-tight">
             {ragione_sociale || "Nuovo tabaccaio"}
           </div>
+
           <div className="text-sm text-slate-500">
-            ID CRM: {id}
+            {id && <>ID CRM: {id}</>}
             {comune && provincia && (
               <>
-                {" "}• {comune} ({provincia})
+                {id && " • "}
+                {comune} ({provincia})
               </>
             )}
           </div>
