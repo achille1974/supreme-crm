@@ -3,8 +3,8 @@
 import Link from "next/link";
 
 type Tabaccaio = {
-  id?: number;
-  id_tabacchino?: number;
+  id?: number | null; // ✅ FIX
+  id_tabacchino?: number | null; // ✅ FIX
 
   ragione_sociale?: string | null;
   comune?: string | null;
@@ -32,20 +32,17 @@ export default function TabaccaioRow({
      TELEFONO PULITO
   ========================= */
   const phoneRaw = tabaccaio.cellulare || tabaccaio.telefono;
-  const phone = phoneRaw
-    ? phoneRaw.replace(/[^\d]/g, "")
-    : null;
+  const phone = phoneRaw ? phoneRaw.replace(/[^\d]/g, "") : null;
 
   /* =========================
      AGENDA (OGGI / SCADUTO)
   ========================= */
   const today = new Date().toISOString().slice(0, 10);
 
-  const isOggi =
-    tabaccaio.data_prossima_azione === today;
+  const isOggi = tabaccaio.data_prossima_azione === today;
 
   const isScaduto =
-    tabaccaio.data_prossima_azione &&
+    !!tabaccaio.data_prossima_azione &&
     tabaccaio.data_prossima_azione < today;
 
   /* =========================
