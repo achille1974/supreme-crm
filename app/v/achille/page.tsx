@@ -8,8 +8,9 @@ function clean(raw: string) {
 }
 
 export default function AchillePage() {
-  const phone = clean(process.env.NEXT_PUBLIC_PHONE_NUMBER || "");
-  const whatsapp = clean(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || phone);
+  const phone = clean("393473214561");      // 📞 numero reale
+  const whatsapp = clean("393473214561");   // 💬 stesso numero
+
   const VIMEO_ID = process.env.NEXT_PUBLIC_VIMEO_ID || "";
 
   const waLink = whatsapp
