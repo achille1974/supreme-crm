@@ -12,7 +12,8 @@ export default function AchillePage() {
   const phone = clean("393473214561");
   const whatsapp = clean("393473214561");
 
-  const VIMEO_ID = "1146389886"; // ← il tuo ID Vimeo reale
+  // 🎥 VIDEO HARDCODED (biglietto pubblico)
+  const VIMEO_ID = "1146389886";
 
   const waLink = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
     "Ciao Achille,\n" +
@@ -54,20 +55,20 @@ export default function AchillePage() {
             />
           </div>
 
-          {VIMEO_ID && (
-            <div style={videoHero}>
-              <iframe
-                src={`https://player.vimeo.com/video/${VIMEO_ID}?title=0&byline=0&portrait=0`}
-                style={{ width: "100%", height: "100%", border: 0 }}
-                allow="autoplay; fullscreen"
-                allowFullScreen
-              />
-            </div>
-          )}
+          <div style={videoHero}>
+            <p style={videoTitle}>Te lo racconto qui, senza filtri.</p>
+            <iframe
+              src={`https://player.vimeo.com/video/${VIMEO_ID}?title=0&byline=0&portrait=0`}
+              style={{ width: "100%", height: "100%", border: 0 }}
+              allow="autoplay; fullscreen"
+              allowFullScreen
+            />
+          </div>
         </div>
 
         {/* NOME */}
         <h1 style={h1}>Achille Beltrami</h1>
+        <p style={heroClaim}>Tabaccaio come te. Risultati concreti.</p>
         <p style={subtitle}>
           Tabaccheria dal 1876 · stessa famiglia · stesso basso commerciale
         </p>
@@ -81,44 +82,48 @@ export default function AchillePage() {
 
         {/* AZIONI */}
         <div style={actions}>
-          <a href={waLink} style={btnPrimary} target="_blank" rel="noreferrer">
+          <a
+            href={waLink}
+            style={btnPrimary}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => console.log("CTA WhatsApp")}
+          >
             💬 WhatsApp
           </a>
           <a href={saveContact} style={btnGhost}>
             💾 Salva contatto
           </a>
-          <a href={telLink} style={btnGhost}>
+          <a
+            href={telLink}
+            style={btnGhost}
+            onClick={() => console.log("CTA Chiama")}
+          >
             📞 Chiama
           </a>
         </div>
 
         {/* TESTO PERSONALE */}
         <div style={text}>
+          <p>Sono un tabaccaio, non un rappresentante.</p>
           <p>
-            Sono un tabaccaio, non un rappresentante. Questo progetto l’ho
-            applicato prima nella mia tabaccheria.
+            Dal 1876 la mia famiglia è qui, nello stesso basso commerciale.
           </p>
           <p>
-            Dal 1876 la mia famiglia è qui, nello stesso basso commerciale. Ho
-            visto il mercato cambiare più volte.
-          </p>
-          <p>
-            Oggi è chiaro che i giovani non entrano più dalle sigarette
-            tradizionali, ma dal vaping e dal tabacco riscaldato.
+            Oggi è chiaro che i giovani entrano dal vaping e dal tabacco
+            riscaldato, non dalle sigarette tradizionali.
           </p>
           <p>
             Non conviene fare un bazar. Conviene specializzarsi e seguire un
             progetto fatto bene.
           </p>
           <p>
-            Io non ho inventato nulla. Ho creduto in un progetto costruito da{" "}
-            <b>Suprem-e</b>, l’ho seguito e oggi ne vedo i risultati in termini
-            di redditività.
+            Ho creduto in un progetto costruito da <b>Suprem-e</b> e oggi ne
+            vedo i risultati concreti.
           </p>
           <p>
             Se sei un collega e vuoi capire se può funzionare anche per te,
-            <b> scrivimi su WhatsApp</b>. Te lo spiego in 5 minuti, senza
-            impegno.
+            <b> scrivimi su WhatsApp</b>. Te lo spiego in 5 minuti.
           </p>
         </div>
 
@@ -138,28 +143,23 @@ export default function AchillePage() {
         <h2 style={h2}>Il progetto industriale oggi</h2>
         <div style={text}>
           <p>
-            Abbiamo investito nel nuovo quartier generale, un’infrastruttura
-            pensata per sostenere una crescita industriale vera. La produzione è
-            stabile, la logistica ha toccato <b>200 spedizioni B2B al giorno</b>,
-            il turno serale è realtà.
+            Quartier generale nuovo, produzione stabile, <b>200 spedizioni B2B
+            al giorno</b>, turno serale attivo.
           </p>
           <p>
-            Il mercato è cambiato: <b>online giù, specializzati e tabaccherie
-            su</b>. In questo contesto non ci siamo adattati: <b>abbiamo
-            guidato</b>.
+            Mercato: <b>online giù, tabaccherie su</b>. Noi abbiamo guidato.
           </p>
           <ul style={list}>
-            <li>Likbar è il <b>4° brand di pod in tabaccheria</b> (Nielsen)</li>
-            <li>Suprem-e è il <b>1° brand di liquidi</b> con ~30% market share</li>
-            <li><b>150 impianti vetrina</b> nelle posizioni chiave</li>
-            <li><b>4.000+</b> nuovi clienti raggiunti</li>
+            <li>Likbar: <b>4° brand pod</b> (Nielsen)</li>
+            <li>Suprem-e: <b>#1 liquidi</b> ~30% market share</li>
+            <li><b>150 impianti vetrina</b></li>
+            <li><b>4.000+ clienti</b></li>
           </ul>
           <p>
-            Fatturato 2025 a <b>+30%</b> in un mercato al +15%.
+            Fatturato 2025: <b>+30%</b> vs mercato +15%.
           </p>
           <p>
-            <b>Siamo una presenza dirompente</b> e pronti a un cambio passo
-            straordinario.
+            <b>Siamo pronti a un cambio passo straordinario.</b>
           </p>
         </div>
 
@@ -207,6 +207,11 @@ export default function AchillePage() {
 
         <footer style={footer}>© Achille Beltrami · dal 1876</footer>
       </main>
+
+      {/* CTA STICKY MOBILE */}
+      <a href={waLink} style={stickyCta}>
+        💬 Scrivimi su WhatsApp
+      </a>
     </div>
   );
 }
@@ -225,8 +230,10 @@ const hero: CSSProperties = {
 
 const photoWrap: CSSProperties = { position: "relative", height: 220 };
 const videoHero: CSSProperties = { aspectRatio: "16 / 9" };
+const videoTitle: CSSProperties = { fontSize: 14, fontWeight: 700, marginBottom: 6 };
 
 const h1: CSSProperties = { fontSize: 28, fontWeight: 900 };
+const heroClaim: CSSProperties = { fontSize: 15, fontWeight: 800, marginBottom: 4 };
 const subtitle: CSSProperties = { fontSize: 14, color: "#374151", marginBottom: 8 };
 const ctaLead: CSSProperties = { fontSize: 15, marginBottom: 12 };
 
@@ -260,7 +267,6 @@ const imgContain: CSSProperties = { position: "relative", height: 160 };
 const imgCover: CSSProperties = { position: "relative", height: 180 };
 
 const links: CSSProperties = { marginTop: 30, display: "flex", flexDirection: "column", gap: 12 };
-
 const logoWrap: CSSProperties = { marginTop: 50, padding: "24px 0", display: "flex", justifyContent: "center" };
 
 const footer: CSSProperties = { marginTop: 40, textAlign: "center", fontSize: 12, color: "#6B7280" };
@@ -270,3 +276,17 @@ const list: CSSProperties = { paddingLeft: 18, display: "flex", flexDirection: "
 const todayDivider: CSSProperties = { marginTop: 28, display: "flex", alignItems: "center", gap: 12 };
 const todayLine: CSSProperties = { flex: 1, height: 1, background: "#E5E7EB" };
 const todayLabel = { fontSize: 14, fontWeight: 800, color: "#111827", whiteSpace: "nowrap" as const };
+
+const stickyCta: CSSProperties = {
+  position: "fixed",
+  bottom: 12,
+  left: "50%",
+  transform: "translateX(-50%)",
+  background: "#16a34a",
+  color: "#fff",
+  padding: "14px 20px",
+  borderRadius: 999,
+  fontWeight: 900,
+  textDecoration: "none",
+  zIndex: 999,
+};
