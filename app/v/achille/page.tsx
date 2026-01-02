@@ -12,7 +12,7 @@ export default function AchillePage() {
   const phone = clean("393473214561");
   const whatsapp = clean("393473214561");
 
-  const VIMEO_ID = process.env.NEXT_PUBLIC_VIMEO_ID || "";
+  const VIMEO_ID = "1146389886"; // ← il tuo ID Vimeo reale
 
   const waLink = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
     "Ciao Achille,\n" +
