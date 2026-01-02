@@ -14,13 +14,15 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   const today = new Date().toISOString().slice(0, 10);
 
+  // ✅ ORA LEGGIAMO LA TABELLA GIUSTA
   const { data } = await supabase
-    .from("tabaccai")
+    .from("tabaccai_master")
     .select("*")
     .order("comune", { ascending: true });
 
   let tabaccai = data ?? [];
 
+  // 🔎 I filtri restano invariati (se un campo non esiste, non rompe nulla)
   if (filtro === "alta") {
     tabaccai = tabaccai.filter((t) => t.priorita === "alta");
   }
