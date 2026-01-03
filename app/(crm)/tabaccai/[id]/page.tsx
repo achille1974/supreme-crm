@@ -38,7 +38,7 @@ export default function TabaccaioPage() {
 
     async function load() {
       const { data, error } = await supabase
-        .from("tabaccai_master") // ✅ TABELLA GIUSTA
+        .from("tabaccai_master")
         .select("*")
         .eq("id", id)
         .single();
@@ -118,7 +118,7 @@ export default function TabaccaioPage() {
     };
 
     const { error } = await supabase
-      .from("tabaccai_master") // ✅ TABELLA GIUSTA
+      .from("tabaccai_master")
       .update(payload)
       .eq("id", id);
 
@@ -145,7 +145,7 @@ export default function TabaccaioPage() {
     if (!ok) return;
 
     const { error } = await supabase
-      .from("tabaccai_master") // ✅ TABELLA GIUSTA
+      .from("tabaccai_master")
       .update({ stato_record: "archiviato" })
       .eq("id", id);
 
@@ -161,7 +161,8 @@ export default function TabaccaioPage() {
   if (loading) return <div className="p-6">Caricamento…</div>;
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-10">
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      {/* HEADER */}
       <TabaccaioHeader
         id={form.id}
         ragione_sociale={form.ragione_sociale}
@@ -170,6 +171,52 @@ export default function TabaccaioPage() {
         indirizzo={form.indirizzo}
         onChange={(v) => setForm({ ...form, ...v })}
       />
+
+      {/* =========================
+          STATUS BAR (READ ONLY)
+      ========================= */}
+      <div className="flex flex-wrap gap-3 items-center text-sm">
+        {/* PRIVACY */}
+        {form.stato_consenso === "concesso" && (
+          <span className="px-3 py-1 rounded-full bg-green-100 text-green-800">
+            🟢 Privacy OK
+          </span>
+        )}
+        {form.stato_consenso === "negato" && (
+          <span className="px-3 py-1 rounded-full bg-red-100 text-red-800">
+            🔴 Privacy negata
+          </span>
+        )}
+        {!form.stato_consenso || form.stato_consenso === "mai_chiesto" && (
+          <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
+            🟡 Privacy non chiesta
+          </span>
+        )}
+
+        {/* PRIORITÀ */}
+        {form.priorita === "alta" && (
+          <span className="px-3 py-1 rounded-full bg-red-600 text-white">
+            🔥 Priorità alta
+          </span>
+        )}
+        {form.priorita === "media" && (
+          <span className="px-3 py-1 rounded-full bg-orange-500 text-white">
+            ⚠️ Priorità media
+          </span>
+        )}
+        {form.priorita === "bassa" && (
+          <span className="px-3 py-1 rounded-full bg-gray-300 text-gray-800">
+            ⬇️ Priorità bassa
+          </span>
+        )}
+
+        {/* PROSSIMA AZIONE */}
+        {form.data_prossima_azione && (
+          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-800">
+            📅 {form.prossima_azione || "Azione"} — {form.data_prossima_azione}
+          </span>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="space-y-8 lg:col-span-2">
