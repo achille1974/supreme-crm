@@ -43,7 +43,7 @@ export default function NuovoTabaccaioPage() {
       ragione_sociale: form.ragione_sociale ?? null,
       titolare: form.titolare ?? null,
       comune: form.comune ?? null,
-      provincia: form.provincia ?? null,
+      prov: form.provincia ?? null,
       indirizzo: form.indirizzo ?? null,
       cap: form.cap ?? null,
       numero_rivendita: form.numero_rivendita ?? null,
