@@ -16,7 +16,7 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   // ✅ ORA LEGGIAMO LA TABELLA GIUSTA
   const { data } = await supabase
-    .from("tabaccai")
+    .from("tabaccai_master")
     .select("*")
     .order("comune", { ascending: true });
 
