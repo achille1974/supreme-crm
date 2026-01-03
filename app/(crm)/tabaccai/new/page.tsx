@@ -28,7 +28,7 @@ export default function NuovoTabaccaioPage() {
   });
 
   /* =========================
-     SAVE (INSERT)
+     SAVE (INSERT → MASTER)
   ========================= */
   async function save() {
     setSaving(true);
@@ -86,7 +86,7 @@ export default function NuovoTabaccaioPage() {
     };
 
     const { data, error } = await supabase
-      .from("tabaccai")
+      .from("tabaccai_master") // ✅ TABELLA CORRETTA
       .insert(payload)
       .select("id")
       .single();
@@ -105,7 +105,7 @@ export default function NuovoTabaccaioPage() {
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-10">
       <TabaccaioHeader
-        id={undefined}
+        id={0} // ✅ nuovo tabaccaio
         ragione_sociale={form.ragione_sociale}
         titolare={form.titolare}
         comune={form.comune}
