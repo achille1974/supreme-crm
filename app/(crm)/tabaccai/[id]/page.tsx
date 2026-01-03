@@ -28,7 +28,7 @@ export default function TabaccaioPage() {
   const [form, setForm] = useState<any>({});
 
   /* =========================
-     LOAD (SOLO MODIFICA)
+     LOAD
   ========================= */
   useEffect(() => {
     if (!id) {
@@ -38,7 +38,7 @@ export default function TabaccaioPage() {
 
     async function load() {
       const { data, error } = await supabase
-        .from("tabaccai") // ✅ CRM OPERATIVO
+        .from("tabaccai")
         .select("*")
         .eq("id", id)
         .single();
@@ -64,7 +64,7 @@ export default function TabaccaioPage() {
   }, [id, router]);
 
   /* =========================
-     SAVE (UPDATE)
+     SAVE
   ========================= */
   async function save() {
     if (!id) return;
@@ -116,7 +116,7 @@ export default function TabaccaioPage() {
     };
 
     const { error } = await supabase
-      .from("tabaccai") // ✅ UPDATE SU CRM
+      .from("tabaccai")
       .update(payload)
       .eq("id", id);
 
@@ -130,9 +130,32 @@ export default function TabaccaioPage() {
     alert("Salvataggio riuscito");
   }
 
-  if (loading) {
-    return <div className="p-6">Caricamento…</div>;
+  /* =========================
+     ARCHIVE
+  ========================= */
+  async function archive() {
+    if (!id) return;
+
+    const ok = confirm(
+      "Vuoi archiviare questo tabaccaio?\n\nVerrà nascosto dalla lista ma non cancellato."
+    );
+    if (!ok) return;
+
+    const { error } = await supabase
+      .from("tabaccai")
+      .update({ stato_record: "archiviato" })
+      .eq("id", id);
+
+    if (error) {
+      alert("Errore durante l’archiviazione");
+      return;
+    }
+
+    alert("Tabaccaio archiviato");
+    router.push("/tabaccai");
   }
+
+  if (loading) return <div className="p-6">Caricamento…</div>;
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-10">
@@ -204,6 +227,7 @@ export default function TabaccaioPage() {
 
       <TabaccaioActions
         onSave={save}
+        onArchive={archive}
         saving={saving}
         onBack={() => router.push("/tabaccai")}
         cellulare={form.cellulare || form.telefono}

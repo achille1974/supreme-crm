@@ -2,6 +2,7 @@ import { openWhatsApp } from "@/lib/whatsapp";
 
 type TabaccaioActionsProps = {
   onSave: () => void;
+  onArchive?: () => void; // ✅ NUOVO
   saving?: boolean;
   onBack: () => void;
   cellulare?: string;
@@ -9,6 +10,7 @@ type TabaccaioActionsProps = {
 
 export default function TabaccaioActions({
   onSave,
+  onArchive,
   saving,
   onBack,
   cellulare,
@@ -42,6 +44,17 @@ export default function TabaccaioActions({
       >
         💬 WhatsApp
       </button>
+
+      {/* ARCHIVIA */}
+      {onArchive && (
+        <button
+          type="button"
+          onClick={onArchive}
+          className="px-5 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700"
+        >
+          🗄️ Archivia tabaccaio
+        </button>
+      )}
     </div>
   );
 }
