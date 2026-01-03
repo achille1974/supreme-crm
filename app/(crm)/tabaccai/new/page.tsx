@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
-// COMPONENTI
+// COMPONENTI UI
 import TabaccaioHeader from "@/components/crm/tabaccai/TabaccaioHeader";
 import TabaccaioContatti from "@/components/crm/tabaccai/TabaccaioContatti";
 import TabaccaioPrivacy from "@/components/crm/tabaccai/TabaccaioPrivacy";
 import TabaccaioStato from "@/components/crm/tabaccai/Stato";
 import TabaccaioNote from "@/components/crm/tabaccai/Note";
-import TabaccaioActions from "@/components/crm/tabaccai/TabaccaioActions";
 import Classificazione from "@/components/crm/tabaccai/Classificazione";
+import TabaccaioActions from "@/components/crm/tabaccai/TabaccaioActions";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,90 +22,95 @@ export default function NuovoTabaccaioPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
 
+  // 🔒 Stato unico della scheda (UI completa)
   const [form, setForm] = useState<any>({
     stato_consenso: "mai_chiesto",
     priorita: "media",
   });
 
   /* =========================
-     SAVE (INSERT → MASTER)
+     SAVE — VERSIONE STABILE
+     Compatibile tabaccai_master
   ========================= */
   async function save() {
+    if (saving) return;
     setSaving(true);
 
+    // 🔐 Costruzione canali consenso (array)
     const canali: string[] = [];
     if (form.consenso_whatsapp) canali.push("whatsapp");
     if (form.consenso_email) canali.push("email");
     if (form.consenso_telefono) canali.push("telefono");
 
+    // ✅ PAYLOAD DEFINITIVO v1 (solo colonne master sicure)
     const payload = {
-      /* ANAGRAFICA */
-      ragione_sociale: form.ragione_sociale ?? null,
-      titolare: form.titolare ?? null,
-      comune: form.comune ?? null,
-      prov: form.provincia ?? null,
-      indirizzo: form.indirizzo ?? null,
-      cap: form.cap ?? null,
-      numero_rivendita: form.numero_rivendita ?? null,
+      // ANAGRAFICA
+      ragione_sociale: form.ragione_sociale || null,
+      comune: form.comune || null,
+      indirizzo: form.indirizzo || null,
+      titolare: form.titolare || null,
 
-      /* CONTATTI */
-      telefono: form.telefono ?? null,
-      cellulare: form.cellulare ?? null,
-      email: form.email ?? null,
-      pec: form.pec ?? null,
+      // CONTATTI
+      telefono: form.telefono || null,
+      cellulare: form.cellulare || null,
+      email: form.email || null,
+      pec: form.pec || null,
 
-      /* PRIVACY */
+      // PRIVACY
       stato_consenso: form.stato_consenso ?? "mai_chiesto",
-      canali_consenso: canali.length ? canali.join(",") : null,
-      modalita_consenso: form.consenso_nota ?? null,
+      canali_consenso: canali.length ? canali : null,
+      modalita_consenso: form.consenso_nota || null,
 
-      /* STATO COMMERCIALE */
-      stato_supreme: form.stato_supreme ?? null,
-      interesse_supreme: form.interesse_supreme ?? null,
+      // STATO COMMERCIALE
+      stato_supreme: form.stato_supreme || null,
+      interesse_supreme: form.interesse_supreme || null,
       priorita: form.priorita ?? "media",
+      prossima_azione: form.prossima_azione || null,
+      data_prossima_azione: form.data_prossima_azione || null,
+      nota_prossima_azione: form.nota_prossima_azione || null,
 
-      /* AGENDA */
-      prossima_azione: form.prossima_azione ?? null,
-      data_prossima_azione: form.data_prossima_azione ?? null,
-      nota_prossima_azione: form.nota_prossima_azione ?? null,
+      // PROFILAZIONE
+      tipo_attivita: form.tipo_attivita || null,
+      dimensione_attivita: form.dimensione_attivita || null,
+      zona_attivita: form.zona_attivita || null,
+      afflusso_attivita: form.afflusso_attivita || null,
+      potenziale_commerciale: form.potenziale_commerciale || null,
+      categoria_cliente: form.categoria_cliente || null,
+      marchi_trattati: form.marchi_trattati || null,
 
-      /* CLASSIFICAZIONE */
-      tipo_attivita: form.tipo_attivita ?? null,
-      dimensione_attivita: form.dimensione_attivita ?? null,
-      zona_attivita: form.zona_attivita ?? null,
-      afflusso_attivita: form.afflusso_attivita ?? null,
-      potenziale_commerciale: form.potenziale_commerciale ?? null,
-      categoria_cliente: form.categoria_cliente ?? null,
-      marchi_trattati: form.marchi_trattati ?? null,
-      altro_1: form.altro_1 ?? null,
-      altro_2: form.altro_2 ?? null,
-      altro_3: form.altro_3 ?? null,
-
-      /* NOTE */
-      note: form.note ?? null,
+      // NOTE
+      note: form.note || null,
     };
 
     const { data, error } = await supabase
-      .from("tabaccai_master") // ✅ TABELLA CORRETTA
+      .from("tabaccai_master")
       .insert(payload)
-      .select("id")
-      .single();
+      .select("id");
 
     setSaving(false);
 
-    if (error || !data?.id) {
-      alert("Errore nel salvataggio");
+    if (error) {
+      console.error("ERRORE INSERT:", error);
+      alert(error.message);
       return;
     }
 
-    // 👉 redirect automatico alla scheda
-    router.push(`/tabaccai/${data.id}`);
+    if (!data || !data[0]?.id) {
+      alert("Inserimento riuscito ma ID non ritornato");
+      return;
+    }
+
+    // ✅ Redirect alla scheda
+    router.push(`/tabaccai/${data[0].id}`);
   }
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-10">
+      {/* =========================
+          HEADER / ANAGRAFICA
+      ========================= */}
       <TabaccaioHeader
-        id={0} // ✅ nuovo tabaccaio
+        id={0}
         ragione_sociale={form.ragione_sociale}
         titolare={form.titolare}
         comune={form.comune}
@@ -117,6 +122,9 @@ export default function NuovoTabaccaioPage() {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* =========================
+            COLONNA SINISTRA
+        ========================= */}
         <div className="space-y-8 lg:col-span-2">
           <TabaccaioContatti
             telefono={form.telefono}
@@ -153,6 +161,9 @@ export default function NuovoTabaccaioPage() {
           />
         </div>
 
+        {/* =========================
+            COLONNA DESTRA
+        ========================= */}
         <div className="space-y-8">
           <Classificazione
             tipo_attivita={form.tipo_attivita}
@@ -170,6 +181,9 @@ export default function NuovoTabaccaioPage() {
         </div>
       </div>
 
+      {/* =========================
+          ACTION BAR
+      ========================= */}
       <TabaccaioActions
         onSave={save}
         saving={saving}

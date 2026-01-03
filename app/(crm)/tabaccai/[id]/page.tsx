@@ -38,17 +38,20 @@ export default function TabaccaioPage() {
 
     async function load() {
       const { data, error } = await supabase
-        .from("tabaccai")
+        .from("tabaccai_master") // ✅ TABELLA GIUSTA
         .select("*")
         .eq("id", id)
         .single();
 
       if (error || !data) {
+        console.error("LOAD ERROR:", error);
         router.replace("/tabaccai");
         return;
       }
 
-      const canali = (data.canali_consenso || "").split(",");
+      const canali: string[] = Array.isArray(data.canali_consenso)
+        ? data.canali_consenso
+        : [];
 
       setForm({
         ...data,
@@ -76,53 +79,53 @@ export default function TabaccaioPage() {
     if (form.consenso_telefono) canali.push("telefono");
 
     const payload = {
-      ragione_sociale: form.ragione_sociale ?? null,
-      titolare: form.titolare ?? null,
-      comune: form.comune ?? null,
-      provincia: form.provincia ?? null,
-      indirizzo: form.indirizzo ?? null,
-      cap: form.cap ?? null,
-      numero_rivendita: form.numero_rivendita ?? null,
+      // ANAGRAFICA
+      ragione_sociale: form.ragione_sociale || null,
+      comune: form.comune || null,
+      indirizzo: form.indirizzo || null,
+      titolare: form.titolare || null,
 
-      telefono: form.telefono ?? null,
-      cellulare: form.cellulare ?? null,
-      email: form.email ?? null,
-      pec: form.pec ?? null,
+      // CONTATTI
+      telefono: form.telefono || null,
+      cellulare: form.cellulare || null,
+      email: form.email || null,
+      pec: form.pec || null,
 
+      // PRIVACY
       stato_consenso: form.stato_consenso ?? "mai_chiesto",
-      canali_consenso: canali.length ? canali.join(",") : null,
-      modalita_consenso: form.consenso_nota ?? null,
+      canali_consenso: canali.length ? canali : null,
+      modalita_consenso: form.consenso_nota || null,
 
-      stato_supreme: form.stato_supreme ?? null,
-      interesse_supreme: form.interesse_supreme ?? null,
+      // STATO COMMERCIALE
+      stato_supreme: form.stato_supreme || null,
+      interesse_supreme: form.interesse_supreme || null,
       priorita: form.priorita ?? "media",
+      prossima_azione: form.prossima_azione || null,
+      data_prossima_azione: form.data_prossima_azione || null,
+      nota_prossima_azione: form.nota_prossima_azione || null,
 
-      prossima_azione: form.prossima_azione ?? null,
-      data_prossima_azione: form.data_prossima_azione ?? null,
-      nota_prossima_azione: form.nota_prossima_azione ?? null,
+      // PROFILAZIONE
+      tipo_attivita: form.tipo_attivita || null,
+      dimensione_attivita: form.dimensione_attivita || null,
+      zona_attivita: form.zona_attivita || null,
+      afflusso_attivita: form.afflusso_attivita || null,
+      potenziale_commerciale: form.potenziale_commerciale || null,
+      categoria_cliente: form.categoria_cliente || null,
+      marchi_trattati: form.marchi_trattati || null,
 
-      tipo_attivita: form.tipo_attivita ?? null,
-      dimensione_attivita: form.dimensione_attivita ?? null,
-      zona_attivita: form.zona_attivita ?? null,
-      afflusso_attivita: form.afflusso_attivita ?? null,
-      potenziale_commerciale: form.potenziale_commerciale ?? null,
-      categoria_cliente: form.categoria_cliente ?? null,
-      marchi_trattati: form.marchi_trattati ?? null,
-      altro_1: form.altro_1 ?? null,
-      altro_2: form.altro_2 ?? null,
-      altro_3: form.altro_3 ?? null,
-
-      note: form.note ?? null,
+      // NOTE
+      note: form.note || null,
     };
 
     const { error } = await supabase
-      .from("tabaccai")
+      .from("tabaccai_master") // ✅ TABELLA GIUSTA
       .update(payload)
       .eq("id", id);
 
     setSaving(false);
 
     if (error) {
+      console.error("SAVE ERROR:", error);
       alert("Errore nel salvataggio");
       return;
     }
@@ -142,7 +145,7 @@ export default function TabaccaioPage() {
     if (!ok) return;
 
     const { error } = await supabase
-      .from("tabaccai")
+      .from("tabaccai_master") // ✅ TABELLA GIUSTA
       .update({ stato_record: "archiviato" })
       .eq("id", id);
 
@@ -164,10 +167,7 @@ export default function TabaccaioPage() {
         ragione_sociale={form.ragione_sociale}
         titolare={form.titolare}
         comune={form.comune}
-        provincia={form.provincia}
         indirizzo={form.indirizzo}
-        cap={form.cap}
-        numero_rivendita={form.numero_rivendita}
         onChange={(v) => setForm({ ...form, ...v })}
       />
 
@@ -178,8 +178,6 @@ export default function TabaccaioPage() {
             cellulare={form.cellulare}
             email={form.email}
             pec={form.pec}
-            partita_iva={form.partita_iva}
-            codice_fiscale={form.codice_fiscale}
             onChange={(v) => setForm({ ...form, ...v })}
           />
 
@@ -217,9 +215,6 @@ export default function TabaccaioPage() {
             potenziale_commerciale={form.potenziale_commerciale}
             categoria_cliente={form.categoria_cliente}
             marchi_trattati={form.marchi_trattati}
-            altro_1={form.altro_1}
-            altro_2={form.altro_2}
-            altro_3={form.altro_3}
             onChange={(v) => setForm({ ...form, ...v })}
           />
         </div>
