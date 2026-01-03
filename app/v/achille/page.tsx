@@ -19,10 +19,12 @@ export default function AchillePage() {
   const whatsapp = clean("393473214561");
 
   const waLink = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
-    "Ciao Achille,\n" +
-      "ho visto il tuo biglietto digitale e ti autorizzo a contattarmi " +
-      "via WhatsApp o telefono solo per questa conversazione."
-  )}`;
+  "Ciao Achille,\n" +
+    "ho visualizzato il tuo biglietto digitale e autorizzo te e la tua azienda " +
+    "a contattarmi via WhatsApp, telefono ed email " +
+    "per comunicazioni commerciali e informative relative ai prodotti Suprem-e, " +
+    "nel rispetto della normativa sulla privacy."
+)}`;
 
   const telLink = `tel:${phone}`;
   const saveContact = "/biglietto/achille-beltrami.vcf";
