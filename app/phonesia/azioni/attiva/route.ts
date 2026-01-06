@@ -9,8 +9,12 @@ const supabase = createClient(
 export async function POST(req: Request) {
   try {
     const { azione_id } = await req.json();
+
     if (!azione_id) {
-      return NextResponse.json({ error: "ID azione mancante" }, { status: 400 });
+      return NextResponse.json(
+        { error: "ID azione mancante" },
+        { status: 400 }
+      );
     }
 
     // 1️⃣ recupera azione
@@ -21,7 +25,10 @@ export async function POST(req: Request) {
       .single();
 
     if (azioneError || !azione) {
-      return NextResponse.json({ error: "Azione non trovata" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Azione non trovata" },
+        { status: 404 }
+      );
     }
 
     // 2️⃣ attiva azione
@@ -31,7 +38,9 @@ export async function POST(req: Request) {
       .eq("id", azione_id);
 
     // 3️⃣ selezione clienti (automatica)
-    let clientiQuery = supabase.from("acq_clienti").select("id");
+    let clientiQuery = supabase
+      .from("acq_clienti")
+      .select("id");
 
     if (azione.pubblico === "nuovi") {
       clientiQuery = clientiQuery.gte(
@@ -48,11 +57,12 @@ export async function POST(req: Request) {
       );
     }
 
-    const { data: clienti = [] } = await clientiQuery;
+    const { data: clienti } = await clientiQuery;
+    const clientiSafe = clienti ?? [];
 
     // 4️⃣ inserisce clienti selezionati
-    if (clienti.length > 0) {
-      const rows = clienti.map(c => ({
+    if (clientiSafe.length > 0) {
+      const rows = clientiSafe.map((c) => ({
         azione_id,
         cliente_id: c.id,
       }));
@@ -66,14 +76,17 @@ export async function POST(req: Request) {
     await supabase.from("acq_log_azioni").insert({
       azione_id,
       evento: "AZIONE_ATTIVATA",
-      note: `Clienti selezionati: ${clienti.length}`,
+      note: `Clienti selezionati: ${clientiSafe.length}`,
     });
 
     return NextResponse.json({
       success: true,
-      clienti_selezionati: clienti.length,
+      clienti_selezionati: clientiSafe.length,
     });
   } catch {
-    return NextResponse.json({ error: "Errore interno" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Errore interno" },
+      { status: 500 }
+    );
   }
 }
