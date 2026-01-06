@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 
 type Props = {
@@ -9,7 +11,7 @@ export default function ScadenzaForm({ clienteId }: Props) {
   const [data, setData] = useState("");
   const [saving, setSaving] = useState(false);
 
-  async function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSaving(true);
 
@@ -24,6 +26,7 @@ export default function ScadenzaForm({ clienteId }: Props) {
         }),
       });
 
+      // reset form
       setTitolo("");
       setData("");
     } finally {
@@ -41,13 +44,15 @@ export default function ScadenzaForm({ clienteId }: Props) {
           onChange={(e) => setTitolo(e.target.value)}
           required
         />
+
         <input
           type="date"
           value={data}
           onChange={(e) => setData(e.target.value)}
           required
         />
-        <button disabled={saving}>
+
+        <button type="submit" disabled={saving}>
           {saving ? "Salvataggio…" : "Aggiungi"}
         </button>
       </div>
