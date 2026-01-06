@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       .update({ stato: "attiva" })
       .eq("id", azione_id);
 
-    // 3️⃣ selezione clienti (automatica)
+    // 3️⃣ selezione clienti
     let clientiQuery = supabase
       .from("acq_clienti")
       .select("id");
@@ -67,9 +67,10 @@ export async function POST(req: Request) {
         cliente_id: c.id,
       }));
 
+      // ⛔️ niente ignoreDuplicates (non supportato)
       await supabase
         .from("acq_azioni_clienti")
-        .insert(rows, { ignoreDuplicates: true });
+        .insert(rows);
     }
 
     // 5️⃣ log
