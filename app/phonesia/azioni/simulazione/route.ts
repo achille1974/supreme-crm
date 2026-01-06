@@ -9,8 +9,12 @@ const supabase = createClient(
 export async function POST(req: Request) {
   try {
     const { azione_id } = await req.json();
+
     if (!azione_id) {
-      return NextResponse.json({ error: "ID azione mancante" }, { status: 400 });
+      return NextResponse.json(
+        { error: "ID azione mancante" },
+        { status: 400 }
+      );
     }
 
     // 1) azione
@@ -21,17 +25,21 @@ export async function POST(req: Request) {
       .single();
 
     if (!azione) {
-      return NextResponse.json({ error: "Azione non trovata" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Azione non trovata" },
+        { status: 404 }
+      );
     }
 
     // 2) clienti selezionati
-    const { data: righe = [] } = await supabase
+    const { data: righe } = await supabase
       .from("acq_azioni_clienti")
       .select("cliente_id")
       .eq("azione_id", azione_id)
       .eq("stato", "pronto");
 
-    const clientiTotali = righe.length;
+    const righeSafe = righe ?? [];
+    const clientiTotali = righeSafe.length;
 
     // 3) breakdown canali (logico, non reale)
     let whatsapp = 0;
@@ -51,6 +59,9 @@ export async function POST(req: Request) {
       canali: { whatsapp, email },
     });
   } catch {
-    return NextResponse.json({ error: "Errore interno" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Errore interno" },
+      { status: 500 }
+    );
   }
 }
