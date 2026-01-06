@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { Scadenza } from "@/lib/types/scadenza";
+import { Scadenza } from "../types/scadenza";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
