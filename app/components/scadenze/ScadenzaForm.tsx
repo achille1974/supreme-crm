@@ -26,7 +26,6 @@ export default function ScadenzaForm({ clienteId }: Props) {
         }),
       });
 
-      // reset form
       setTitolo("");
       setData("");
     } finally {
