@@ -1,13 +1,13 @@
-import ScadenzeList from "@/components/scadenze/ScadenzeList";
+import ScadenzeList from "./ScadenzeList";
 
-export default function ClienteScadenzeSection({
-  clienteId,
-}: {
+type Props = {
   clienteId: number;
-}) {
+};
+
+export default function ClienteScadenzeSection({ clienteId }: Props) {
   return (
     <section style={{ marginTop: 24 }}>
-      <h3>Scadenze</h3>
+      <h2 style={{ marginBottom: 12 }}>Scadenze</h2>
       <ScadenzeList clienteId={clienteId} />
     </section>
   );

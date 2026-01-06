@@ -1,66 +1,58 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { getScadenzeByCliente, markScadenzaGestita } from "@/lib/data/scadenze";
-import { Scadenza } from "@/lib/types/scadenza";
 import ScadenzaForm from "./ScadenzaForm";
 
-export default function ScadenzeList({ clienteId }: { clienteId: number }) {
-  const [scadenze, setScadenze] = useState<Scadenza[]>([]);
-  const [editing, setEditing] = useState<Scadenza | null>(null);
-  const [adding, setAdding] = useState(false);
+type Scadenza = {
+  id: number;
+  titolo: string;
+  data_scadenza: string;
+};
 
-  async function load() {
-    const data = await getScadenzeByCliente(clienteId);
-    setScadenze(data);
-  }
+type Props = {
+  clienteId: number;
+};
+
+export default function ScadenzeList({ clienteId }: Props) {
+  const [scadenze, setScadenze] = useState<Scadenza[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch(
+          `/phonesia/api/scadenze?cliente_id=${clienteId}`
+        );
+        const json = await res.json();
+        setScadenze(json || []);
+      } catch {
+        setScadenze([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     load();
   }, [clienteId]);
 
+  if (loading) return <p>Caricamento scadenze…</p>;
+
   return (
     <div>
-      <button onClick={() => setAdding(true)}>➕ Aggiungi scadenza</button>
+      <ScadenzaForm clienteId={clienteId} />
 
-      {adding && (
-        <ScadenzaForm
-          clienteId={clienteId}
-          onClose={() => setAdding(false)}
-          onSaved={load}
-        />
+      {scadenze.length === 0 ? (
+        <p style={{ color: "#777", marginTop: 12 }}>
+          Nessuna scadenza presente.
+        </p>
+      ) : (
+        <ul style={{ marginTop: 12 }}>
+          {scadenze.map((s) => (
+            <li key={s.id}>
+              {s.titolo} –{" "}
+              {new Date(s.data_scadenza).toLocaleDateString()}
+            </li>
+          ))}
+        </ul>
       )}
-
-      {editing && (
-        <ScadenzaForm
-          clienteId={clienteId}
-          scadenza={editing}
-          onClose={() => setEditing(null)}
-          onSaved={load}
-        />
-      )}
-
-      <ul>
-        {scadenze.map((s) => (
-          <li key={s.id}>
-            <b>{s.tipo_scadenza}</b> – {s.data_scadenza} –{" "}
-            {s.descrizione || "-"} – <i>{s.stato}</i>
-            {s.stato === "attiva" && (
-              <>
-                <button onClick={() => setEditing(s)}>✏️</button>
-                <button
-                  onClick={async () => {
-                    await markScadenzaGestita(s.id);
-                    load();
-                  }}
-                >
-                  ✅
-                </button>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
