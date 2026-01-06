@@ -68,7 +68,7 @@ export default async function DashboardPHONESIA() {
   /* =========================
      OGGI – CLIENTI PRIORITARI
   ========================= */
-  const { data: oggi = [] } = await supabase
+  const { data: oggiRaw } = await supabase
     .from("acq_clienti")
     .select("id, nome, cognome, telefono")
     .not(
@@ -79,13 +79,17 @@ export default async function DashboardPHONESIA() {
     .order("created_at", { ascending: true })
     .limit(10);
 
+  const oggi = oggiRaw ?? [];
+
   /* =========================
      AZIONI – LISTA DECISIONALE
   ========================= */
-  const { data: azioni = [] } = await supabase
+  const { data: azioniRaw } = await supabase
     .from("acq_azioni")
     .select("id, titolo, canale, pubblico, stato, created_at")
     .order("created_at", { ascending: false });
+
+  const azioni = azioniRaw ?? [];
 
   /* =========================
      RENDER
