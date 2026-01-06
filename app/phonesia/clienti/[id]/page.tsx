@@ -1,12 +1,18 @@
 import { notFound } from "next/navigation";
-import ClienteScadenzeSection from "@/components/clienti/ClienteScadenzeSection";
+import ClienteScadenzeSection from "@/app/components/scadenze/ClienteScadenzeSection";
 import { createClient } from "@supabase/supabase-js";
 
+/**
+ * Supabase client (server-side)
+ */
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+/**
+ * Tipologia Cliente PHONESIA
+ */
 type Cliente = {
   id: number;
   nome: string;
@@ -17,6 +23,9 @@ type Cliente = {
   created_at: string;
 };
 
+/**
+ * Recupera cliente per ID
+ */
 async function getCliente(id: number): Promise<Cliente | null> {
   const { data, error } = await supabase
     .from("acq_clienti")
@@ -24,20 +33,29 @@ async function getCliente(id: number): Promise<Cliente | null> {
     .eq("id", id)
     .single();
 
-  if (error) return null;
+  if (error || !data) return null;
   return data as Cliente;
 }
 
+/**
+ * Pagina cliente PHONESIA
+ */
 export default async function ClientePhonesiaPage({
   params,
 }: {
   params: { id: string };
 }) {
   const clienteId = Number(params.id);
-  if (Number.isNaN(clienteId)) notFound();
+
+  if (Number.isNaN(clienteId)) {
+    notFound();
+  }
 
   const cliente = await getCliente(clienteId);
-  if (!cliente) notFound();
+
+  if (!cliente) {
+    notFound();
+  }
 
   return (
     <div style={{ padding: 24, maxWidth: 900 }}>
@@ -65,13 +83,11 @@ export default async function ClientePhonesiaPage({
 
         <div style={{ display: "grid", gap: 8 }}>
           <div>
-            <strong>Telefono:</strong>{" "}
-            {cliente.telefono || "—"}
+            <strong>Telefono:</strong> {cliente.telefono || "—"}
           </div>
 
           <div>
-            <strong>Email:</strong>{" "}
-            {cliente.email || "—"}
+            <strong>Email:</strong> {cliente.email || "—"}
           </div>
 
           <div>
@@ -81,7 +97,7 @@ export default async function ClientePhonesiaPage({
         </div>
       </section>
 
-      {/* SCADENZE */}
+      {/* EVENTI / SCADENZE */}
       <ClienteScadenzeSection clienteId={cliente.id} />
 
       {/* SPAZIO FUTURO */}
