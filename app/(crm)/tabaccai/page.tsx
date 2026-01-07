@@ -1,5 +1,6 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import TabaccaiClient from "@/components/crm/tabaccai/TabaccaiClient";
+import DashboardFiltri from "@/components/crm/tabaccai/DashboardFiltri";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,10 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
+      {/* ✅ STEP 2 — Dashboard filtri (solo visual, nessuna logica) */}
+      <DashboardFiltri />
+
+      {/* ✅ TABELLA ESISTENTE — NON TOCCATA */}
       <TabaccaiClient tabaccai={tabaccai} />
     </div>
   );
