@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 export default function TopSwitch() {
   const pathname = usePathname();
 
-  const isTabaccai = pathname === "/tabaccai";
-  const isDashboard = pathname.startsWith("/tabaccai/dashboard");
+  const isTabaccai = pathname.startsWith("/tabaccai");
+  const isDashboard = pathname === "/dashboard";
   const isBiglietto = pathname.startsWith("/v/");
 
   const base =
@@ -25,7 +25,7 @@ export default function TopSwitch() {
       </Link>
 
       <Link
-        href="/tabaccai/dashboard"
+        href="/dashboard"
         className={`${base} ${isDashboard ? active : inactive}`}
       >
         Dashboard
@@ -40,4 +40,3 @@ export default function TopSwitch() {
     </div>
   );
 }
-
