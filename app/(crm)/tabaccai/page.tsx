@@ -1,6 +1,5 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import TabaccaiClient from "@/components/crm/tabaccai/TabaccaiClient";
-import DashboardFiltri from "@/components/crm/tabaccai/DashboardFiltri";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +14,7 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   const today = new Date().toISOString().slice(0, 10);
 
-  // ✅ ORA LEGGIAMO LA TABELLA GIUSTA
+  // ✅ LEGGIAMO LA TABELLA GIUSTA
   const { data } = await supabase
     .from("tabaccai_master")
     .select("*")
@@ -23,7 +22,7 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   let tabaccai = data ?? [];
 
-  // 🔎 I filtri restano invariati (se un campo non esiste, non rompe nulla)
+  // 🔎 FILTRI (INVARIATI)
   if (filtro === "alta") {
     tabaccai = tabaccai.filter((t) => t.priorita === "alta");
   }
@@ -56,10 +55,7 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
-      {/* ✅ STEP 3 — contatore totale (read-only, sicuro) */}
-      <DashboardFiltri totale={tabaccai.length} />
-
-      {/* ✅ TABELLA ESISTENTE — NON TOCCATA */}
+      {/* ✅ SOLO LISTA OPERATIVA */}
       <TabaccaiClient tabaccai={tabaccai} />
     </div>
   );
