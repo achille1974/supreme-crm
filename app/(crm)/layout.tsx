@@ -1,4 +1,5 @@
 import Link from "next/link";
+import TopSwitch from "@/components/crm/TopSwitch";
 
 export default function CrmLayout({
   children,
@@ -19,22 +20,8 @@ export default function CrmLayout({
             </div>
           </div>
 
-          {/* NAV */}
-          <nav className="flex gap-2">
-            <Link
-              href="/tabaccai"
-              className="px-3 py-2 rounded-lg border bg-white text-sm font-semibold hover:bg-slate-100"
-            >
-              Tabaccai
-            </Link>
-
-            <Link
-              href="/v/achille"
-              className="px-3 py-2 rounded-lg border text-sm hover:bg-slate-100"
-            >
-              Biglietto
-            </Link>
-          </nav>
+          {/* NAV SWITCH */}
+          <TopSwitch />
         </div>
       </header>
 
