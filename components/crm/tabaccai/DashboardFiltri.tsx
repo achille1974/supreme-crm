@@ -16,7 +16,9 @@ export default function DashboardFiltri({
     >
       <strong>Dashboard Filtri Tabaccai</strong>
 
-      <div
+      {/* ✅ BOX TOTALE TABACCAI — CLICCABILE */}
+      <a
+        href="/tabaccai"
         style={{
           marginTop: "12px",
           padding: "12px",
@@ -25,6 +27,8 @@ export default function DashboardFiltri({
           display: "inline-block",
           minWidth: "180px",
           textAlign: "center",
+          textDecoration: "none",
+          color: "inherit",
         }}
       >
         <div style={{ fontSize: "12px", color: "#666" }}>
@@ -34,8 +38,10 @@ export default function DashboardFiltri({
         <div style={{ fontSize: "28px", fontWeight: "bold" }}>
           {totale}
         </div>
+      </a>
 
-        {/* ✅ PULSANTE BIGLIETTO */}
+      {/* ✅ PULSANTE BIGLIETTO (SEPARATO) */}
+      <div>
         <a
           href="/v/achille"
           style={{
