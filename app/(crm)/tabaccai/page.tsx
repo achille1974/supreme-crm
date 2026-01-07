@@ -56,8 +56,8 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
-      {/* ✅ STEP 2 — Dashboard filtri (solo visual, nessuna logica) */}
-      <DashboardFiltri />
+      {/* ✅ STEP 3 — contatore totale (read-only, sicuro) */}
+      <DashboardFiltri totale={tabaccai.length} />
 
       {/* ✅ TABELLA ESISTENTE — NON TOCCATA */}
       <TabaccaiClient tabaccai={tabaccai} />

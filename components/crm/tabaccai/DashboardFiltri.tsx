@@ -1,6 +1,10 @@
 "use client";
 
-export default function DashboardFiltri() {
+export default function DashboardFiltri({
+  totale,
+}: {
+  totale: number;
+}) {
   return (
     <div
       style={{
@@ -11,8 +15,24 @@ export default function DashboardFiltri() {
       }}
     >
       <strong>Dashboard Filtri Tabaccai</strong>
-      <div style={{ fontSize: "12px", color: "#666" }}>
-        (step 1 – componente collegato, nessuna logica)
+
+      <div
+        style={{
+          marginTop: "12px",
+          padding: "12px",
+          border: "1px solid #ddd",
+          borderRadius: "6px",
+          display: "inline-block",
+          minWidth: "180px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: "12px", color: "#666" }}>
+          Totale tabaccai
+        </div>
+        <div style={{ fontSize: "28px", fontWeight: "bold" }}>
+          {totale}
+        </div>
       </div>
     </div>
   );
