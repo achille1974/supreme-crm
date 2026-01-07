@@ -7,7 +7,7 @@ export default function TopSwitch() {
   const pathname = usePathname();
 
   const isTabaccai = pathname.startsWith("/tabaccai");
-  const isBiglietto = pathname.startsWith("/biglietto");
+  const isBiglietto = pathname.startsWith("/v/");
 
   const base =
     "px-4 py-2 rounded-lg border text-sm font-medium transition";
@@ -24,7 +24,7 @@ export default function TopSwitch() {
       </Link>
 
       <Link
-        href="/biglietto"
+        href="/v/achille"
         className={`${base} ${isBiglietto ? active : inactive}`}
       >
         Biglietto
