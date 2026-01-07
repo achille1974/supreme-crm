@@ -30,9 +30,27 @@ export default function DashboardFiltri({
         <div style={{ fontSize: "12px", color: "#666" }}>
           Totale tabaccai
         </div>
+
         <div style={{ fontSize: "28px", fontWeight: "bold" }}>
           {totale}
         </div>
+
+        {/* ✅ PULSANTE BIGLIETTO */}
+        <a
+          href="/v/achille"
+          style={{
+            display: "inline-block",
+            marginTop: "8px",
+            padding: "6px 10px",
+            fontSize: "12px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            textDecoration: "none",
+            color: "#000",
+          }}
+        >
+          Vai al Biglietto
+        </a>
       </div>
     </div>
   );
