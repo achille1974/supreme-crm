@@ -4,10 +4,6 @@ import { useMemo, useState } from "react";
 import TabaccaiList from "./TabaccaiList";
 import TabaccaiFilters from "./TabaccaiFilters";
 
-/**
- * Tipo UNIFICATO e compatibile
- * (coincide con TabaccaiList e TabaccaioRow)
- */
 export type Tabaccaio = {
   id?: number | null;
   id_tabacchino?: number | null;
@@ -42,10 +38,21 @@ export default function TabaccaiClient({
     comune: "",
   });
 
+  const hasActiveFilters =
+    filters.search.trim() !== "" || filters.comune !== "";
+
   /* =========================
-     LISTA FILTRATA
+     LISTA VISIBILE
   ========================= */
-  const filteredTabaccai = useMemo(() => {
+  const visibleTabaccai = useMemo(() => {
+    // 🔒 REGOLA D’ORO:
+    // se NON ci sono filtri → mostra TUTTO
+    if (!hasActiveFilters) {
+      return tabaccai;
+    }
+
+    const search = filters.search.toLowerCase().trim();
+
     return tabaccai.filter((t) => {
       const haystack = `
         ${t.ragione_sociale ?? ""}
@@ -53,10 +60,7 @@ export default function TabaccaiClient({
         ${t.indirizzo ?? ""}
       `.toLowerCase();
 
-      if (
-        filters.search &&
-        !haystack.includes(filters.search.toLowerCase())
-      ) {
+      if (search && !haystack.includes(search)) {
         return false;
       }
 
@@ -66,10 +70,10 @@ export default function TabaccaiClient({
 
       return true;
     });
-  }, [tabaccai, filters]);
+  }, [tabaccai, filters, hasActiveFilters]);
 
   /* =========================
-     COMUNI (per select)
+     COMUNI (SELECT)
   ========================= */
   const comuni = useMemo(() => {
     return Array.from(
@@ -102,7 +106,7 @@ export default function TabaccaiClient({
       />
 
       {/* LISTA */}
-      <TabaccaiList tabaccai={filteredTabaccai} />
+      <TabaccaiList tabaccai={visibleTabaccai} />
     </div>
   );
 }
