@@ -9,10 +9,9 @@ import {
 } from "recharts";
 import Link from "next/link";
 
-/* ======================
-   COMPONENTI BASE
-====================== */
-
+/* =========================
+   CARD GRANDE (CLICK)
+========================= */
 type BigCardProps = {
   label: string;
   value: number;
@@ -33,14 +32,17 @@ function BigCard({ label, value, color, href }: BigCardProps) {
   return href ? <Link href={href}>{content}</Link> : content;
 }
 
+/* =========================
+   BLOCCO TORTA (DESKTOP)
+========================= */
 function PieBlock({
   data,
 }: {
   data: { name: string; value: number; color: string }[];
 }) {
   return (
-    <div className="w-full" style={{ height: 220 }}>
-      <ResponsiveContainer width="100%" height={220}>
+    <div className="hidden md:block h-56">
+      <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={data}
@@ -60,10 +62,9 @@ function PieBlock({
   );
 }
 
-/* ======================
+/* =========================
    DASHBOARD CLIENT
-====================== */
-
+========================= */
 export default function DashboardClient(props: any) {
   const {
     totale,
@@ -76,13 +77,16 @@ export default function DashboardClient(props: any) {
   } = props;
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-14">
 
-      {/* ================= TABACCAI ================= */}
+      {/* =========================
+         TABACCAI / CONSENSO
+      ========================= */}
       <section>
         <h2 className="text-lg font-bold mb-4">Tabaccai</h2>
 
-        <div className="grid grid-cols-3 gap-4">
+        {/* CARD */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <BigCard label="Totale" value={totale} color="text-blue-600" />
           <BigCard
             label="Consenso SÌ"
@@ -98,6 +102,7 @@ export default function DashboardClient(props: any) {
           />
         </div>
 
+        {/* TORTA DESKTOP */}
         <PieBlock
           data={[
             { name: "Sì", value: consensoSi, color: "#16a34a" },
@@ -106,11 +111,13 @@ export default function DashboardClient(props: any) {
         />
       </section>
 
-      {/* ================= STATO COMMERCIALE ================= */}
+      {/* =========================
+         STATO COMMERCIALE
+      ========================= */}
       <section>
         <h2 className="text-lg font-bold mb-4">Stato commerciale</h2>
 
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           <BigCard label="Totale" value={totale} color="text-blue-600" />
           <BigCard
             label="Mai contattati"
@@ -155,98 +162,101 @@ export default function DashboardClient(props: any) {
         />
       </section>
 
-      {/* ================= INTERESSE ================= */}
+      {/* =========================
+         INTERESSE
+      ========================= */}
       <section>
         <h2 className="text-lg font-bold mb-4">Interesse</h2>
 
-        <div className="grid grid-cols-4 gap-4">
-          <BigCard label="Totale" value={totale} color="text-blue-600" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <BigCard
+            label="Basso"
+            value={interesse.basso}
+            color="text-slate-600"
+            href="/tabaccai?interesse=basso"
+          />
+          <BigCard
+            label="Medio"
+            value={interesse.medio}
+            color="text-amber-600"
+            href="/tabaccai?interesse=medio"
+          />
           <BigCard
             label="Alto"
             value={interesse.alto}
             color="text-green-600"
             href="/tabaccai?interesse=alto"
           />
-          <BigCard
-            label="Medio"
-            value={interesse.medio}
-            color="text-amber-500"
-            href="/tabaccai?interesse=medio"
-          />
-          <BigCard
-            label="Basso"
-            value={interesse.basso}
-            color="text-slate-400"
-            href="/tabaccai?interesse=basso"
-          />
         </div>
 
         <PieBlock
           data={[
-            { name: "Alto", value: interesse.alto, color: "#16a34a" },
+            { name: "Basso", value: interesse.basso, color: "#64748b" },
             { name: "Medio", value: interesse.medio, color: "#f59e0b" },
-            { name: "Basso", value: interesse.basso, color: "#94a3b8" },
+            { name: "Alto", value: interesse.alto, color: "#22c55e" },
           ]}
         />
       </section>
 
-      {/* ================= PRIORITÀ ================= */}
+      {/* =========================
+         PRIORITÀ
+      ========================= */}
       <section>
         <h2 className="text-lg font-bold mb-4">Priorità</h2>
 
-        <div className="grid grid-cols-4 gap-4">
-          <BigCard label="Totale" value={totale} color="text-blue-600" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <BigCard
+            label="Bassa"
+            value={priorita.bassa}
+            color="text-slate-600"
+            href="/tabaccai?priorita=bassa"
+          />
+          <BigCard
+            label="Media"
+            value={priorita.media}
+            color="text-blue-600"
+            href="/tabaccai?priorita=media"
+          />
           <BigCard
             label="Alta"
             value={priorita.alta}
             color="text-red-600"
             href="/tabaccai?priorita=alta"
           />
-          <BigCard
-            label="Media"
-            value={priorita.media}
-            color="text-amber-500"
-            href="/tabaccai?priorita=media"
-          />
-          <BigCard
-            label="Bassa"
-            value={priorita.bassa}
-            color="text-slate-400"
-            href="/tabaccai?priorita=bassa"
-          />
         </div>
 
         <PieBlock
           data={[
+            { name: "Bassa", value: priorita.bassa, color: "#64748b" },
+            { name: "Media", value: priorita.media, color: "#3b82f6" },
             { name: "Alta", value: priorita.alta, color: "#dc2626" },
-            { name: "Media", value: priorita.media, color: "#f59e0b" },
-            { name: "Bassa", value: priorita.bassa, color: "#94a3b8" },
           ]}
         />
       </section>
 
-      {/* ================= CATEGORIA CLIENTE ================= */}
+      {/* =========================
+         CATEGORIA CLIENTE
+      ========================= */}
       <section>
         <h2 className="text-lg font-bold mb-4">Categoria cliente</h2>
 
-        <div className="grid grid-cols-5 gap-4">
-          <BigCard label="Totale" value={totale} color="text-blue-600" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <BigCard
             label="Potenziale"
             value={categoria.potenziale}
-            color="text-amber-500"
+            color="text-slate-600"
             href="/tabaccai?categoria=potenziale"
           />
           <BigCard
             label="Attivo"
             value={categoria.attivo}
-            color="text-emerald-600"
+            color="text-green-600"
             href="/tabaccai?categoria=attivo"
           />
           <BigCard
             label="Fermo"
             value={categoria.fermo}
-            color="text-slate-400"
+            color="text-amber-600"
             href="/tabaccai?categoria=fermo"
           />
           <BigCard
@@ -259,14 +269,13 @@ export default function DashboardClient(props: any) {
 
         <PieBlock
           data={[
-            { name: "Potenziale", value: categoria.potenziale, color: "#f59e0b" },
-            { name: "Attivo", value: categoria.attivo, color: "#059669" },
-            { name: "Fermo", value: categoria.fermo, color: "#94a3b8" },
+            { name: "Potenziale", value: categoria.potenziale, color: "#64748b" },
+            { name: "Attivo", value: categoria.attivo, color: "#22c55e" },
+            { name: "Fermo", value: categoria.fermo, color: "#f59e0b" },
             { name: "Perso", value: categoria.perso, color: "#dc2626" },
           ]}
         />
       </section>
-
     </div>
   );
 }
