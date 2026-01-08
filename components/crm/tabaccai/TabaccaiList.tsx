@@ -5,6 +5,7 @@ import TabaccaioRow from "./TabaccaioRow";
 
 export type Tabaccaio = {
   id?: number | null;
+  id_tabacchino?: number | null;
 
   ragione_sociale?: string | null;
   comune?: string | null;
@@ -46,7 +47,6 @@ export default function TabaccaiList({ tabaccai }: Props) {
           </p>
         </div>
 
-        {/* ✅ UNICO MODO CORRETTO DI CREARE */}
         <Link
           href="/tabaccai/new"
           className="
@@ -60,18 +60,21 @@ export default function TabaccaiList({ tabaccai }: Props) {
       </div>
 
       {/* LISTA */}
-      {!tabaccai || tabaccai.length === 0 ? (
+      {tabaccai.length === 0 ? (
         <div className="text-sm text-slate-500 text-center py-8">
           Nessun tabaccaio trovato.
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {tabaccai.map((t) => {
-            if (!t.id) return null;
+          {tabaccai.map((t, index) => {
+            const key =
+              t.id ??
+              t.id_tabacchino ??
+              `${t.ragione_sociale ?? "tabaccaio"}-${index}`;
 
             return (
               <div
-                key={t.id}
+                key={key}
                 className="
                   bg-white
                   rounded-xl
