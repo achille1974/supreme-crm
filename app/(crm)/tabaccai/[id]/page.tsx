@@ -7,7 +7,6 @@ import { createClient } from "@supabase/supabase-js";
 // COMPONENTI
 import TabaccaioHeader from "@/components/crm/tabaccai/TabaccaioHeader";
 import TabaccaioContatti from "@/components/crm/tabaccai/TabaccaioContatti";
-import TabaccaioPrivacy from "@/components/crm/tabaccai/TabaccaioPrivacy";
 import TabaccaioStato from "@/components/crm/tabaccai/Stato";
 import TabaccaioNote from "@/components/crm/tabaccai/Note";
 import TabaccaioActions from "@/components/crm/tabaccai/TabaccaioActions";
@@ -49,15 +48,9 @@ export default function TabaccaioPage() {
         return;
       }
 
-      const canali: string[] = Array.isArray(data.canali_consenso)
-        ? data.canali_consenso
-        : [];
-
       setForm({
         ...data,
-        consenso_whatsapp: canali.includes("whatsapp"),
-        consenso_email: canali.includes("email"),
-        consenso_telefono: canali.includes("telefono"),
+        stato_consenso: data.stato_consenso ?? "mai_chiesto",
       });
 
       setLoading(false);
@@ -73,11 +66,6 @@ export default function TabaccaioPage() {
     if (!id) return;
     setSaving(true);
 
-    const canali: string[] = [];
-    if (form.consenso_whatsapp) canali.push("whatsapp");
-    if (form.consenso_email) canali.push("email");
-    if (form.consenso_telefono) canali.push("telefono");
-
     const payload = {
       // ANAGRAFICA
       ragione_sociale: form.ragione_sociale || null,
@@ -91,10 +79,8 @@ export default function TabaccaioPage() {
       email: form.email || null,
       pec: form.pec || null,
 
-      // PRIVACY
+      // CONSENSO (UNICO)
       stato_consenso: form.stato_consenso ?? "mai_chiesto",
-      canali_consenso: canali.length ? canali : null,
-      modalita_consenso: form.consenso_nota || null,
 
       // STATO COMMERCIALE
       stato_supreme: form.stato_supreme || null,
@@ -162,7 +148,6 @@ export default function TabaccaioPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
-      {/* HEADER */}
       <TabaccaioHeader
         id={form.id}
         ragione_sociale={form.ragione_sociale}
@@ -172,14 +157,11 @@ export default function TabaccaioPage() {
         onChange={(v) => setForm({ ...form, ...v })}
       />
 
-      {/* =========================
-          STATUS BAR (READ ONLY)
-      ========================= */}
+      {/* STATUS BAR */}
       <div className="flex flex-wrap gap-3 items-center text-sm">
-        {/* PRIVACY */}
-        {form.stato_consenso === "concesso" && (
+        {form.stato_consenso === "autorizzato" && (
           <span className="px-3 py-1 rounded-full bg-green-100 text-green-800">
-            🟢 Privacy OK
+            🟢 Privacy autorizzata
           </span>
         )}
         {form.stato_consenso === "negato" && (
@@ -187,33 +169,9 @@ export default function TabaccaioPage() {
             🔴 Privacy negata
           </span>
         )}
-        {!form.stato_consenso || form.stato_consenso === "mai_chiesto" && (
+        {form.stato_consenso === "mai_chiesto" && (
           <span className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
             🟡 Privacy non chiesta
-          </span>
-        )}
-
-        {/* PRIORITÀ */}
-        {form.priorita === "alta" && (
-          <span className="px-3 py-1 rounded-full bg-red-600 text-white">
-            🔥 Priorità alta
-          </span>
-        )}
-        {form.priorita === "media" && (
-          <span className="px-3 py-1 rounded-full bg-orange-500 text-white">
-            ⚠️ Priorità media
-          </span>
-        )}
-        {form.priorita === "bassa" && (
-          <span className="px-3 py-1 rounded-full bg-gray-300 text-gray-800">
-            ⬇️ Priorità bassa
-          </span>
-        )}
-
-        {/* PROSSIMA AZIONE */}
-        {form.data_prossima_azione && (
-          <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-800">
-            📅 {form.prossima_azione || "Azione"} — {form.data_prossima_azione}
           </span>
         )}
       </div>
@@ -235,15 +193,6 @@ export default function TabaccaioPage() {
             prossima_azione={form.prossima_azione}
             data_prossima_azione={form.data_prossima_azione}
             nota_prossima_azione={form.nota_prossima_azione}
-            onChange={(v) => setForm({ ...form, ...v })}
-          />
-
-          <TabaccaioPrivacy
-            consenso_stato={form.stato_consenso}
-            consenso_whatsapp={form.consenso_whatsapp}
-            consenso_email={form.consenso_email}
-            consenso_telefono={form.consenso_telefono}
-            consenso_nota={form.consenso_nota}
             onChange={(v) => setForm({ ...form, ...v })}
           />
 
