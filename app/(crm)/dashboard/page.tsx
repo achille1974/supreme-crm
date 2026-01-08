@@ -23,8 +23,9 @@ export default async function DashboardPage() {
     <div className="max-w-7xl mx-auto px-4 py-6 bg-slate-50">
       <DashboardClient
         totale={totale}
-        consensoSi={await count("stato_consenso", "consenso")}
-        consensoNo={await count("stato_consenso", "mai_chiesto")}
+        consensoSi={await count("stato_consenso", "autorizzato")}
+        consensoNo={await count("stato_consenso", "negato")}
+
         stato={{
           mai: await count("stato_supreme", "mai_contattato"),
           contattato: await count("stato_supreme", "contattato"),
