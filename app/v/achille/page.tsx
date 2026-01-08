@@ -19,12 +19,12 @@ export default function AchillePage() {
   const whatsapp = clean("393473214561");
 
   const waLink = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
-  "Ciao Achille,\n" +
-    "ho visualizzato il tuo biglietto digitale e autorizzo te e la tua azienda " +
-    "a contattarmi via WhatsApp, telefono ed email " +
-    "per comunicazioni commerciali e informative relative ai prodotti Suprem-e, " +
-    "nel rispetto della normativa sulla privacy."
-)}`;
+    "Ciao Achille,\n" +
+      "ho visualizzato il tuo biglietto digitale e autorizzo te e la tua azienda " +
+      "a contattarmi via WhatsApp, telefono ed email " +
+      "per comunicazioni commerciali e informative relative ai prodotti Suprem-e, " +
+      "nel rispetto della normativa sulla privacy."
+  )}`;
 
   const telLink = `tel:${phone}`;
   const saveContact = "/biglietto/achille-beltrami.vcf";
@@ -59,7 +59,6 @@ export default function AchillePage() {
             />
           </div>
 
-          {/* VIDEO SELF HOSTED */}
           <div style={videoWrap}>
             <div style={videoOverlay}>
               Te lo racconto da tabaccaio a tabaccaio. Senza filtri.
@@ -75,7 +74,6 @@ export default function AchillePage() {
           </div>
         </section>
 
-        {/* ================= IDENTITÀ ================= */}
         <h1 style={h1}>Achille Beltrami</h1>
 
         <p style={heroClaim}>
@@ -86,7 +84,6 @@ export default function AchillePage() {
           Tabaccheria dal 1876 · stessa famiglia · stesso basso commerciale
         </p>
 
-        {/* ================= INTRO ================= */}
         <p style={ctaLead}>
           Se sei un tabaccaio e vuoi capire se questo progetto può funzionare
           anche per te, <b>scrivimi ora</b>. Te lo racconto in modo concreto,
@@ -96,7 +93,7 @@ export default function AchillePage() {
         {/* ================= AZIONI ================= */}
         <div style={actions}>
           <a href={waLink} style={btnPrimary} target="_blank" rel="noreferrer">
-            💬 WhatsApp
+            🟢 Clicca per autorizzarmi a contattarti telefonicamente o su WhatsApp
           </a>
           <a href={saveContact} style={btnGhost}>
             💾 Salva contatto
@@ -158,55 +155,7 @@ export default function AchillePage() {
         <section style={text}>
           <p>
             Abbiamo investito nel nuovo quartier generale, un’infrastruttura
-            pensata per sostenere una crescita industriale vera. La produzione è
-            stabile, la logistica ha toccato <b>200 spedizioni B2B al giorno</b>,
-            il turno serale è realtà.
-          </p>
-
-          <p>
-            Il mercato è cambiato: <b>online giù, specializzati e tabaccherie
-            su</b>. In questo contesto non ci siamo adattati:{" "}
-            <b>abbiamo guidato</b>.
-          </p>
-
-          <ul style={list}>
-            <li>
-              Likbar è il <b>4° brand di pod in tabaccheria</b> (Nielsen)
-            </li>
-            <li>
-              Suprem-e è il <b>1° brand di liquidi</b> con circa{" "}
-              <b>30% di market share</b>
-            </li>
-            <li>
-              Oltre <b>150 impianti vetrina</b> nelle posizioni strategiche
-            </li>
-            <li>
-              Più di <b>4.000 nuovi clienti</b> raggiunti
-            </li>
-          </ul>
-
-          <p>
-            Fatturato 2025 a <b>+30%</b> in un mercato al +15%:{" "}
-            <b>il doppio della crescita media nazionale</b>.
-          </p>
-
-          <p>
-            Innovazione reale: hardware open Fly, Nicotine Pouches, linea MAXI
-            Flavour con estratti organici, spin-off Biscottone e un reparto R&D
-            che continua a guidare il mercato.
-          </p>
-
-          <p>
-            Commerciale e comunicazione: presenza sulle principali riviste,
-            materiali dedicati, <b>11 eventi territoriali</b>, una strategia
-            social che riporta il brand al centro della conversazione.
-          </p>
-
-          <p>
-            <b>
-              Siamo una presenza dirompente e pronti a un cambio passo
-              straordinario.
-            </b>
+            pensata per sostenere una crescita industriale vera.
           </p>
         </section>
 
@@ -229,7 +178,6 @@ export default function AchillePage() {
           ))}
         </div>
 
-        {/* ================= LINK ================= */}
         <div style={links}>
           <a href="/biglietto/storia-beltrami.pdf" target="_blank" style={btnGhost}>
             📜 Storia della mia famiglia
@@ -239,7 +187,6 @@ export default function AchillePage() {
           </a>
         </div>
 
-        {/* ================= LOGO ================= */}
         <div style={logoWrap}>
           <Image
             src="/biglietto/logo.jpg"
@@ -256,7 +203,7 @@ export default function AchillePage() {
 
       {/* CTA MOBILE */}
       <a href={waLink} style={stickyCta}>
-        💬 Scrivimi su WhatsApp
+        🟢 Clicca per autorizzarmi a contattarti telefonicamente o su WhatsApp
       </a>
     </div>
   );
