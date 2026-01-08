@@ -79,7 +79,7 @@ export default function TabaccaioPage() {
       email: form.email || null,
       pec: form.pec || null,
 
-      // CONSENSO (UNICO)
+      // CONSENSO UNICO
       stato_consenso: form.stato_consenso ?? "mai_chiesto",
 
       // STATO COMMERCIALE
@@ -175,6 +175,22 @@ export default function TabaccaioPage() {
           </span>
         )}
       </div>
+
+      {/* CONSENSO (UNICO) */}
+      <section className="space-y-2">
+        <h3 className="font-bold">Consenso contatto</h3>
+        <select
+          className="border rounded px-3 py-2"
+          value={form.stato_consenso}
+          onChange={(e) =>
+            setForm({ ...form, stato_consenso: e.target.value })
+          }
+        >
+          <option value="mai_chiesto">🟡 Mai chiesto</option>
+          <option value="autorizzato">🟢 Autorizzato</option>
+          <option value="negato">🔴 Negato</option>
+        </select>
+      </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="space-y-8 lg:col-span-2">
