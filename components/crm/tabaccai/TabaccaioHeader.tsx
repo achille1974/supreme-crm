@@ -158,15 +158,16 @@ export default function TabaccaioHeader({
             Numero rivendita (Monopoli)
           </label>
           <input
-            type="number"
-            value={numero_rivendita ?? ""}
-            onChange={(e) =>
-              onChange?.({
-                numero_rivendita: e.target.value
-                  ? Number(e.target.value)
-                  : null,
-              })
-            }
+  type="text"
+  inputMode="numeric"
+  value={numero_rivendita ?? ""}
+  onChange={(e) =>
+    onChange?.({
+      numero_rivendita: e.target.value || null,
+    })
+  }
+/>
+
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Es. 12"
           />

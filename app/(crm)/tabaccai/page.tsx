@@ -36,9 +36,10 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
   // QUERY BASE
   // =========================
   const { data } = await supabase
-    .from("tabaccai_master")
-    .select("*")
-    .order("comune", { ascending: true });
+  .from("tabaccai_master")
+  .select("*")
+  .eq("attivo", true)
+  .order("comune", { ascending: true });
 
   let tabaccai = data ?? [];
 
@@ -86,10 +87,10 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
 
   // CONSENSO
   if (consenso === "si") {
-    tabaccai = tabaccai.filter(
-      (t) => t.stato_consenso === "consenso"
-    );
-  }
+  tabaccai = tabaccai.filter(
+    (t) => t.stato_consenso === "autorizzato"
+  );
+}
 
   if (consenso === "no") {
     tabaccai = tabaccai.filter(

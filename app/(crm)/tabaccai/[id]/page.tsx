@@ -132,7 +132,7 @@ export default function TabaccaioPage() {
 
     const { error } = await supabase
       .from("tabaccai_master")
-      .update({ stato_record: "archiviato" })
+      .update({ attivo: false })
       .eq("id", id);
 
     if (error) {
