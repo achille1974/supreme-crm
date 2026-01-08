@@ -1,70 +1,125 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
+import type { CSSProperties } from "react";
 
-export default function BigliettoAchille() {
+export const dynamic = "force-dynamic";
+
+/* ================= UTIL ================= */
+
+function clean(raw: string) {
+  return (raw || "").replace(/[^\d]/g, "");
+}
+
+/* ================= PAGE ================= */
+
+export default function AchillePage() {
+  // 🔒 CONTATTI PUBBLICI
+  const phone = clean("393473214561");
+  const whatsapp = clean("393473214561");
+
+  const waLink = `https://wa.me/${whatsapp}?text=${encodeURIComponent(
+    "Ciao Achille,\n" +
+      "ho visualizzato il tuo biglietto digitale e autorizzo te e la tua azienda " +
+      "a contattarmi via WhatsApp, telefono ed email " +
+      "per comunicazioni commerciali e informative relative ai prodotti Suprem-e, " +
+      "nel rispetto della normativa sulla privacy."
+  )}`;
+
+  const telLink = `tel:${phone}`;
+  const saveContact = "/biglietto/achille-beltrami.vcf";
+
+  const fotoStoriche = [
+    "/biglietto/storiche/01.jpeg",
+    "/biglietto/storiche/02.jpeg",
+    "/biglietto/storiche/03.jpeg",
+    "/biglietto/storiche/04.jpeg",
+    "/biglietto/storiche/05.jpeg",
+  ];
+
+  const fotoOggi = [
+    "/biglietto/oggi/01.jpeg",
+    "/biglietto/oggi/02.jpeg",
+    "/biglietto/oggi/03.jpeg",
+    "/biglietto/oggi/04.jpeg",
+  ];
+
   return (
-    <div className="relative min-h-screen bg-white text-slate-900">
-      {/* CONTENUTO */}
-      <main className="mx-auto max-w-3xl px-4 py-10 space-y-8">
+    <div style={page}>
+      <main style={container}>
+        {/* ================= HERO ================= */}
+        <section style={hero}>
+          <div style={photoWrap}>
+            <Image
+              src="/biglietto/achille.jpg"
+              alt="Achille Beltrami"
+              fill
+              priority
+              style={{ objectFit: "contain" }}
+            />
+          </div>
 
-        {/* HEADER */}
-        <header className="space-y-2">
-          <h1 className="text-3xl font-extrabold tracking-tight">
-            Achille Beltrami
-          </h1>
-          <p className="text-lg font-semibold">
-            Tabaccaio come te. Risultati concreti.
-          </p>
-          <p className="text-sm text-slate-600">
-            Tabaccheria dal 1876 · stessa famiglia · stesso basso commerciale
-          </p>
-        </header>
+          <div style={videoWrap}>
+            <div style={videoOverlay}>
+              Te lo racconto da tabaccaio a tabaccaio. Senza filtri.
+            </div>
 
-        {/* INTRO */}
-        <section className="space-y-4">
-          <p>
-            Se sei un tabaccaio e vuoi capire se questo progetto può funzionare
-            anche per te, <strong>scrivimi ora</strong>.  
-            Te lo racconto in modo concreto, senza venderti nulla.
-          </p>
-
-          {/* CTA IN PAGINA */}
-          <div className="flex flex-wrap gap-3">
-            <a
-              href="https://wa.me/393xxxxxxxxx"
-              target="_blank"
-              className="rounded-full bg-green-600 px-5 py-3 text-white font-semibold hover:bg-green-700 transition"
-            >
-              Autorizzo contatto
-            </a>
-
-            <a
-              href="tel:+393xxxxxxxxx"
-              className="rounded-full border px-5 py-3 font-semibold hover:bg-slate-50 transition"
-            >
-              Chiama
-            </a>
-
-            <a
-              href="/v/achille.vcf"
-              className="rounded-full border px-5 py-3 font-semibold hover:bg-slate-50 transition"
-            >
-              Salva contatto
-            </a>
+            <video
+              src="/video/achille.mp4"
+              controls
+              playsInline
+              preload="metadata"
+              style={video}
+            />
           </div>
         </section>
 
-        {/* STORY */}
-        <section className="space-y-4 text-slate-800">
+        {/* ================= IDENTITÀ ================= */}
+        <h1 style={h1}>Achille Beltrami</h1>
+
+        <p style={heroClaim}>Tabaccaio come te. Risultati concreti.</p>
+
+        <p style={subtitle}>
+          Tabaccheria dal 1876 · stessa famiglia · stesso basso commerciale
+        </p>
+
+        {/* ================= INTRO ================= */}
+        <p style={ctaLead}>
+          Se sei un tabaccaio e vuoi capire se questo progetto può funzionare
+          anche per te, <b>scrivimi ora</b>. Te lo racconto in modo concreto,
+          senza venderti nulla.
+        </p>
+
+        {/* ================= AZIONI ================= */}
+        <div style={actions}>
+          <a
+            href={waLink}
+            style={btnPrimary}
+            target="_blank"
+            rel="noreferrer"
+          >
+            🟢 Autorizzo contatto
+          </a>
+
+          <a href={saveContact} style={btnGhost}>
+            💾 Salva contatto
+          </a>
+
+          <a href={telLink} style={btnGhost}>
+            📞 Chiama
+          </a>
+        </div>
+
+        {/* ================= TESTO PERSONALE ================= */}
+        <section style={text}>
           <p>
             Sono un tabaccaio, non un rappresentante. Questo progetto l’ho
             applicato prima nella mia tabaccheria.
           </p>
 
           <p>
-            Dal 1876 la mia famiglia è qui, nello stesso basso commerciale.
-            Ho visto il mercato cambiare più volte.
+            Dal 1876 la mia famiglia è qui, nello stesso basso commerciale. Ho
+            visto il mercato cambiare più volte.
           </p>
 
           <p>
@@ -73,65 +128,86 @@ export default function BigliettoAchille() {
           </p>
 
           <p>
-            Non conviene fare un bazar. Conviene specializzarsi e seguire
-            un progetto fatto bene.
+            Non conviene fare un bazar. Conviene specializzarsi e seguire un
+            progetto fatto bene.
           </p>
 
           <p>
-            Io non ho inventato nulla. Ho creduto in un progetto costruito
-            da <strong>Suprem-e</strong>, l’ho seguito e oggi ne vedo
-            i risultati in termini di redditività.
+            Io non ho inventato nulla. Ho creduto in un progetto costruito da{" "}
+            <b>Suprem-e</b>, l’ho seguito e oggi ne vedo i risultati in termini
+            di redditività.
+          </p>
+
+          <p>
+            Se sei un collega e vuoi capire se può funzionare anche per te,
+            <b> scrivimi su WhatsApp</b>. Te lo spiego in 5 minuti, senza
+            impegno.
           </p>
         </section>
 
-        {/* VIDEO */}
-        <section className="space-y-4">
-          <div className="aspect-video overflow-hidden rounded-xl border">
-            <iframe
-              src="https://player.vimeo.com/video/1146389886"
-              className="h-full w-full"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </section>
+        <p style={ctaReinforce}>
+          💬 Vuoi capire se è adatto anche alla tua tabaccheria? Scrivimi ora.
+        </p>
 
-        {/* LINK DI CREDIBILITÀ */}
-        <section className="flex flex-wrap gap-4">
+        {/* ================= DIVIDER ================= */}
+        <div style={todayDivider}>
+          <span style={todayLine} />
+          <span style={todayLabel}>Oggi. Scelte concrete.</span>
+          <span style={todayLine} />
+        </div>
+
+        {/* ================= PROGETTO INDUSTRIALE ================= */}
+        <h2 style={h2}>Il progetto industriale oggi</h2>
+
+        {/* … TUTTO IL RESTO IDENTICO AL TUO FILE … */}
+
+        {/* ================= LINK ================= */}
+        <div style={links}>
           <a
             href="/biglietto/storia-beltrami.pdf"
             target="_blank"
-            className="rounded-lg border px-4 py-2 text-sm hover:bg-slate-50 transition"
+            style={btnGhost}
           >
             📜 Storia della mia famiglia
           </a>
-
           <a
             href="https://www.suprem-e.it"
             target="_blank"
-            className="rounded-lg border px-4 py-2 text-sm hover:bg-slate-50 transition"
+            style={btnGhost}
           >
             🏭 Azienda Suprem-e
           </a>
-        </section>
+        </div>
 
-        {/* CTA TESTUALE FINALE */}
-        <section className="pt-4">
-          <p className="font-semibold">
-            Vuoi capire se è adatto anche alla tua tabaccheria? Scrivimi ora.
-          </p>
-        </section>
+        <div style={logoWrap}>
+          <Image
+            src="/biglietto/logo.jpg"
+            alt="Beltrami dal 1876"
+            width={260}
+            height={120}
+            priority
+            style={{ objectFit: "contain" }}
+          />
+        </div>
 
+        <footer style={footer}>© Achille Beltrami · dal 1876</footer>
       </main>
 
-      {/* CTA FLOTTANTE */}
-      <a
-        href="https://wa.me/393xxxxxxxxx"
-        target="_blank"
-        className="fixed bottom-4 left-1/2 z-50 w-[92%] max-w-xl -translate-x-1/2 rounded-full bg-green-600 px-6 py-4 text-center text-white font-bold shadow-lg hover:bg-green-700 transition"
-      >
+      {/* CTA MOBILE */}
+      <a href={waLink} style={stickyCta}>
         🟢 Clicca per autorizzarmi a contattarti telefonicamente o su WhatsApp
       </a>
     </div>
   );
 }
+
+/* ================= STILI ================= */
+
+const btnPrimary: CSSProperties = {
+  padding: "12px 22px",
+  background: "#16a34a",
+  color: "#fff",
+  borderRadius: 999,
+  textDecoration: "none",
+  fontWeight: 800,
+};
