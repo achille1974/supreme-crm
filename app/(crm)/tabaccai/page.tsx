@@ -33,20 +33,23 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
   const today = new Date().toISOString().slice(0, 10);
 
   // =========================
-  // QUERY BASE
+  // QUERY BASE (STABILE)
   // =========================
+  // Regola:
+  // - attivo = true  → visibile
+  // - attivo = null  → visibile (vecchi record)
+  // - attivo = false → nascosto
   const { data } = await supabase
-  .from("tabaccai_master")
-  .select("*")
-  .eq("attivo", true)
-  .order("comune", { ascending: true });
+    .from("tabaccai_master")
+    .select("*")
+    .or("attivo.is.null,attivo.eq.true")
+    .order("comune", { ascending: true });
 
   let tabaccai = data ?? [];
 
   // =========================
-  // FILTRI LEGACY (INVARIATI)
+  // FILTRI LEGACY
   // =========================
-
   if (f === "alta") {
     tabaccai = tabaccai.filter((t) => t.priorita === "alta");
   }
@@ -82,21 +85,22 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
   }
 
   // =========================
-  // FILTRI DASHBOARD (ROBUSTI)
+  // FILTRI DASHBOARD
   // =========================
 
   // CONSENSO
   if (consenso === "si") {
-  tabaccai = tabaccai.filter(
-    (t) => t.stato_consenso === "autorizzato"
-  );
-}
+    tabaccai = tabaccai.filter(
+      (t) => t.stato_consenso === "autorizzato"
+    );
+  }
 
   if (consenso === "no") {
     tabaccai = tabaccai.filter(
       (t) =>
         t.stato_consenso === null ||
-        t.stato_consenso === "mai_chiesto"
+        t.stato_consenso === "mai_chiesto" ||
+        t.stato_consenso === "negato"
     );
   }
 
@@ -109,13 +113,13 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
     );
   }
 
-  if (stato) {
+  if (stato && stato !== "mai") {
     tabaccai = tabaccai.filter(
       (t) => t.stato_supreme === stato
     );
   }
 
-  // PRIORITÀ (NULL = BASSA)
+  // PRIORITÀ
   if (priorita === "bassa") {
     tabaccai = tabaccai.filter(
       (t) =>
@@ -136,7 +140,7 @@ export default async function TabaccaiPage({ searchParams }: PageProps) {
     );
   }
 
-  // INTERESSE (NULL = BASSO)
+  // INTERESSE
   if (interesse === "basso") {
     tabaccai = tabaccai.filter(
       (t) =>
