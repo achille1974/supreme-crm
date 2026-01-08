@@ -1,15 +1,15 @@
 "use client";
 
 type TabaccaioHeaderProps = {
-  id?: number; // ✅ ORA OPZIONALE (CREAZIONE OK)
+  id?: number;
   ragione_sociale?: string | null;
   titolare?: string | null;
   comune?: string | null;
   indirizzo?: string | null;
   provincia?: string | null;
   cap?: string | null;
-  numero_rivendita?: number | null;
-  onChange?: (v: Partial<any>) => void;
+  numero_rivendita?: string | null;
+  onChange: (v: Partial<any>) => void;
 };
 
 export default function TabaccaioHeader({
@@ -49,7 +49,6 @@ export default function TabaccaioHeader({
           </div>
         </div>
 
-        {/* BADGE */}
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
             Anagrafica
@@ -70,7 +69,7 @@ export default function TabaccaioHeader({
             type="text"
             value={ragione_sociale ?? ""}
             onChange={(e) =>
-              onChange?.({ ragione_sociale: e.target.value })
+              onChange({ ragione_sociale: e.target.value })
             }
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -85,7 +84,7 @@ export default function TabaccaioHeader({
             type="text"
             value={titolare ?? ""}
             onChange={(e) =>
-              onChange?.({ titolare: e.target.value })
+              onChange({ titolare: e.target.value })
             }
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -100,7 +99,7 @@ export default function TabaccaioHeader({
             type="text"
             value={comune ?? ""}
             onChange={(e) =>
-              onChange?.({ comune: e.target.value })
+              onChange({ comune: e.target.value })
             }
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -115,7 +114,7 @@ export default function TabaccaioHeader({
             type="text"
             value={provincia ?? ""}
             onChange={(e) =>
-              onChange?.({ provincia: e.target.value })
+              onChange({ provincia: e.target.value })
             }
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="SR / RG"
@@ -131,7 +130,7 @@ export default function TabaccaioHeader({
             type="text"
             value={indirizzo ?? ""}
             onChange={(e) =>
-              onChange?.({ indirizzo: e.target.value })
+              onChange({ indirizzo: e.target.value })
             }
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -144,9 +143,10 @@ export default function TabaccaioHeader({
           </label>
           <input
             type="text"
+            inputMode="numeric"
             value={cap ?? ""}
             onChange={(e) =>
-              onChange?.({ cap: e.target.value })
+              onChange({ cap: e.target.value })
             }
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
@@ -158,16 +158,14 @@ export default function TabaccaioHeader({
             Numero rivendita (Monopoli)
           </label>
           <input
-  type="text"
-  inputMode="numeric"
-  value={numero_rivendita ?? ""}
-  onChange={(e) =>
-    onChange?.({
-      numero_rivendita: e.target.value || null,
-    })
-  }
-/>
-
+            type="text"
+            inputMode="numeric"
+            value={numero_rivendita ?? ""}
+            onChange={(e) =>
+              onChange({
+                numero_rivendita: e.target.value || null,
+              })
+            }
             className="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Es. 12"
           />
