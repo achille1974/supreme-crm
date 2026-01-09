@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import TabaccaiList from "./TabaccaiList";
-import { useTabaccai } from "./data/useTabaccai";
+import { useTabaccai } from "./data/useTabaccai.ts";
 
 export default function TabaccaiClient() {
   // 🔗 DATI CENTRALIZZATI
