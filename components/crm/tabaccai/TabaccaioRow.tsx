@@ -19,7 +19,7 @@ type Tabaccaio = {
   prossima_azione?: string | null;
   data_prossima_azione?: string | null;
 
-  attivo?: boolean | null; // ➕ AGGIUNTA (campo già esistente nel DB)
+  attivo?: boolean | null;
 };
 
 const supabase = createClient(
@@ -29,27 +29,26 @@ const supabase = createClient(
 
 export default function TabaccaioRow({
   tabaccaio,
-  onReload, // ➕ AGGIUNTA
+  onReload,
 }: {
   tabaccaio: Tabaccaio;
-  onReload: () => void; // ➕ AGGIUNTA
+  onReload?: () => void; // ✅ OPZIONALE (FIX DEFINITIVO)
 }) {
   const id = tabaccaio.id;
   if (!id) return null;
 
   /* =========================
-     TELEFONO PULITO
+     TELEFONO
   ========================= */
   const phoneRaw = tabaccaio.cellulare || tabaccaio.telefono;
   const phone = phoneRaw ? phoneRaw.replace(/[^\d]/g, "") : null;
 
   /* =========================
-     AGENDA (OGGI / SCADUTO)
+     DATE
   ========================= */
   const today = new Date().toISOString().slice(0, 10);
 
   const isOggi = tabaccaio.data_prossima_azione === today;
-
   const isScaduto =
     !!tabaccaio.data_prossima_azione &&
     tabaccaio.data_prossima_azione < today;
@@ -66,7 +65,7 @@ export default function TabaccaioRow({
   };
 
   /* =========================
-     BADGE PRIVACY
+     BADGE CONSENSO
   ========================= */
   const badgePrivacy = () => {
     if (tabaccaio.stato_consenso === "completo")
@@ -79,7 +78,7 @@ export default function TabaccaioRow({
   };
 
   /* =========================
-     DISATTIVA TABACCAIO
+     DISATTIVA
   ========================= */
   const handleDisattiva = async () => {
     await supabase
@@ -87,7 +86,7 @@ export default function TabaccaioRow({
       .update({ attivo: false })
       .eq("id", id);
 
-    onReload(); // ➕ AGGIUNTA: ricarica lista dal padre
+    onReload?.(); // ✅ SAFE CALL
   };
 
   return (
@@ -96,14 +95,12 @@ export default function TabaccaioRow({
         flex flex-col gap-4
         sm:flex-row sm:items-center sm:justify-between
         p-4
+        border rounded
         ${tabaccaio.attivo === false ? "opacity-40" : ""}
       `}
     >
-      {/* =========================
-          DATI TABACCAIO
-      ========================= */}
+      {/* DATI */}
       <div className="flex flex-col gap-1">
-        {/* COMUNE + BADGE */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="text-xs font-semibold uppercase text-slate-400">
             {tabaccaio.comune || "—"}
@@ -132,17 +129,14 @@ export default function TabaccaioRow({
           )}
         </div>
 
-        {/* RAGIONE SOCIALE */}
         <div className="text-base font-bold text-slate-900">
           {tabaccaio.ragione_sociale || "Senza nome"}
         </div>
 
-        {/* INDIRIZZO */}
         <div className="text-sm text-slate-600">
           {tabaccaio.indirizzo || "Indirizzo non disponibile"}
         </div>
 
-        {/* AGENDA / FOLLOW-UP */}
         <div className="text-sm">
           {tabaccaio.prossima_azione ? (
             <span
@@ -167,16 +161,13 @@ export default function TabaccaioRow({
         </div>
       </div>
 
-      {/* =========================
-          AZIONI
-      ========================= */}
+      {/* AZIONI */}
       <div className="flex items-center gap-2">
-        {/* CHIAMA */}
         {phone ? (
           <a
             href={`tel:${phone}`}
             title="Chiama"
-            className="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 transition"
+            className="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200"
           >
             📞
           </a>
@@ -186,14 +177,13 @@ export default function TabaccaioRow({
           </div>
         )}
 
-        {/* WHATSAPP */}
         {phone ? (
           <a
             href={`https://wa.me/${phone}`}
             target="_blank"
             rel="noopener noreferrer"
             title="WhatsApp"
-            className="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 transition"
+            className="h-10 w-10 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200"
           >
             💬
           </a>
@@ -203,21 +193,19 @@ export default function TabaccaioRow({
           </div>
         )}
 
-        {/* SCHEDA CRM */}
         <Link
           href={`/tabaccai/${id}`}
           title="Apri scheda CRM"
-          className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition"
+          className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
         >
           📇
         </Link>
 
-        {/* DISATTIVA */}
         {tabaccaio.attivo !== false && (
           <button
             onClick={handleDisattiva}
-            title="Disattiva tabaccaio"
-            className="h-10 w-10 flex items-center justify-center rounded-lg bg-red-100 hover:bg-red-200 transition"
+            title="Disattiva"
+            className="h-10 w-10 flex items-center justify-center rounded-lg bg-red-100 hover:bg-red-200"
           >
             ⛔
           </button>
