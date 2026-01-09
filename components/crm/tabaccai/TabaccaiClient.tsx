@@ -1,112 +1,37 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 import TabaccaiList from "./TabaccaiList";
-import TabaccaiFilters from "./TabaccaiFilters";
 
-export type Tabaccaio = {
-  id?: number | null;
-  id_tabacchino?: number | null;
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-  ragione_sociale?: string | null;
-  comune?: string | null;
-  indirizzo?: string | null;
+export default function TabaccaiClient() {
+  const [tabaccai, setTabaccai] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  stato_supreme?: string | null;
-  interesse_supreme?: string | null;
-  priorita?: string | null;
+  useEffect(() => {
+    supabase
+      .from("tabaccai_master")
+      .select("*")
+      .order("comune", { ascending: true })
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("Supabase error:", error);
+          setTabaccai([]);
+        } else {
+          setTabaccai(data ?? []);
+        }
+        setLoading(false);
+      });
+  }, []);
 
-  stato_consenso?: string | null;
-  data_prossima_azione?: string | null;
-};
+  if (loading) {
+    return <div className="p-4">Caricamento…</div>;
+  }
 
-type Filters = {
-  search: string;
-  comune: string;
-};
-
-export default function TabaccaiClient({
-  tabaccai,
-}: {
-  tabaccai: Tabaccaio[];
-}) {
-  /* =========================
-     STATO FILTRI
-  ========================= */
-  const [filters, setFilters] = useState<Filters>({
-    search: "",
-    comune: "",
-  });
-
-  const hasActiveFilters =
-    filters.search.trim() !== "" || filters.comune !== "";
-
-  /* =========================
-     LISTA VISIBILE
-  ========================= */
-  const visibleTabaccai = useMemo(() => {
-    // 🔒 REGOLA D’ORO:
-    // se NON ci sono filtri → mostra TUTTO
-    if (!hasActiveFilters) {
-      return tabaccai;
-    }
-
-    const search = filters.search.toLowerCase().trim();
-
-    return tabaccai.filter((t) => {
-      const haystack = `
-        ${t.ragione_sociale ?? ""}
-        ${t.comune ?? ""}
-        ${t.indirizzo ?? ""}
-      `.toLowerCase();
-
-      if (search && !haystack.includes(search)) {
-        return false;
-      }
-
-      if (filters.comune && t.comune !== filters.comune) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [tabaccai, filters, hasActiveFilters]);
-
-  /* =========================
-     COMUNI (SELECT)
-  ========================= */
-  const comuni = useMemo(() => {
-    return Array.from(
-      new Set(
-        tabaccai
-          .map((t) => t.comune)
-          .filter((c): c is string => Boolean(c))
-      )
-    ).sort();
-  }, [tabaccai]);
-
-  /* =========================
-     RENDER
-  ========================= */
-  return (
-    <div className="space-y-6">
-      {/* HEADER */}
-      <div>
-        <h1 className="text-2xl font-bold">Tabaccai</h1>
-        <p className="text-sm text-gray-500">
-          Lista operativa tabaccai
-        </p>
-      </div>
-
-      {/* FILTRI */}
-      <TabaccaiFilters
-        filters={filters}
-        onChange={setFilters}
-        comuni={comuni}
-      />
-
-      {/* LISTA */}
-      <TabaccaiList tabaccai={visibleTabaccai} />
-    </div>
-  );
+  return <TabaccaiList tabaccai={tabaccai} />;
 }
