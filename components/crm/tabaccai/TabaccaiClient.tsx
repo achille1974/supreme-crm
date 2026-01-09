@@ -1,40 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { useMemo, useState } from "react";
 import TabaccaiList from "./TabaccaiList";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { useTabaccai } from "./data/useTabaccai";
 
 export default function TabaccaiClient() {
-  const [tabaccai, setTabaccai] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 🔗 DATI CENTRALIZZATI
+  const {
+    tabaccai,
+    loading,
+    reload,
+  } = useTabaccai();
 
-  // 🔍 filtri
+  // 🔍 filtri UI
   const [search, setSearch] = useState("");
   const [comune, setComune] = useState("");
 
-  // 📥 carico lista UNA VOLTA
-  useEffect(() => {
-    supabase
-      .from("tabaccai_master")
-      .select("*")
-      .order("comune", { ascending: true })
-      .then(({ data, error }) => {
-        if (error) {
-          console.error("Supabase error:", error);
-          setTabaccai([]);
-        } else {
-          setTabaccai(data ?? []);
-        }
-        setLoading(false);
-      });
-  }, []);
-
-  // 📍 elenco comuni (unici)
+  // 📍 elenco comuni (derivato, non query)
   const comuni = useMemo(() => {
     return Array.from(
       new Set(
@@ -45,13 +27,11 @@ export default function TabaccaiClient() {
     ).sort();
   }, [tabaccai]);
 
-  // 🔎 filtro finale
+  // 🔎 filtro finale (SOLO client)
   const filteredTabaccai = useMemo(() => {
     return tabaccai.filter((t) => {
-      // filtro comune
       if (comune && t.comune !== comune) return false;
 
-      // ricerca libera
       if (search.trim()) {
         const q = search.toLowerCase();
 
@@ -120,7 +100,10 @@ export default function TabaccaiClient() {
       </div>
 
       {/* LISTA */}
-      <TabaccaiList tabaccai={filteredTabaccai} />
+      <TabaccaiList
+        tabaccai={filteredTabaccai}
+        onReload={reload}
+      />
     </div>
   );
 }
